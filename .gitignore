@@ -14,4 +14,10 @@ Thumbs.db
 # Temp files
 *.tmp
 *.temp
+
+# Node modules
+node_modules/
+
+# Environment
+.env
 .mcp.json

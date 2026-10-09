@@ -5,17 +5,29 @@
 -- ================================================
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS `finance_butler`
+CREATE DATABASE IF NOT EXISTS `money`
   DEFAULT CHARACTER SET utf8mb4
   DEFAULT COLLATE utf8mb4_unicode_ci;
 
 -- 使用数据库
-USE `finance_butler`;
+USE `money`;
+
+-- ================================================
+-- 0. 删除所有表（按外键依赖顺序）
+-- ================================================
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `login_logs`;
+DROP TABLE IF EXISTS `exports`;
+DROP TABLE IF EXISTS `records`;
+DROP TABLE IF EXISTS `budgets`;
+DROP TABLE IF EXISTS `payment_channels`;
+DROP TABLE IF EXISTS `categories`;
+DROP TABLE IF EXISTS `users`;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- ================================================
 -- 1. 用户表 (users)
 -- ================================================
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` VARCHAR(50) NOT NULL COMMENT '用户ID',
   `username` VARCHAR(50) NOT NULL COMMENT '用户名',

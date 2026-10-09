@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>财务小管家 - 个人设置</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#a05a63',
+            'primary-container': '#ffd4d8',
+            'on-primary-container': '#5c2a30',
+            secondary: '#2d8b74',
+            'secondary-container': '#b8f0e0',
+            'on-secondary-container': '#1a5c47',
+            'cat-dining': '#f8a5ab',
+            'cat-transit': '#ffc2d5',
+            'cat-shopping': '#ffb3d1',
+            'cat-housing': '#ffd6e2',
+            'cat-entertainment': '#d4bfff',
+            'cat-medical': '#ffeb99',
+            'cat-education': '#a8d8ff',
+            'cat-other': '#b8e6e6',
+            'cat-income': '#6fcfb8',
+            'surface-card': '#FFFFFF',
+            'surface-card-subtle': '#f0f3f8',
+            'surface-container-low': '#eef2fa',
+            'surface-container-high': '#ced9ec',
+            'surface-canvas': '#f0f4f9',
+            'text-primary': '#1a2332',
+            'text-secondary': '#5a6577',
+            'text-muted': '#8896a8',
+            'border-subtle': '#d0d8e4',
+            'border-focus': '#f8a5ab',
+            error: '#dc2626'
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Noto Sans SC', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+    body { font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif; }
+    ::-webkit-scrollbar { display: none; }
+    .card { background: var(--color-surface-card); border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06); }
+    .sidebar { background: linear-gradient(180deg, #ffffff 0%, #f8fafd 100%); }
+  </style>
+</head>
+<body class="bg-surface-canvas text-text-primary antialiased">
+  <div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar w-64 flex-shrink-0 flex flex-col border-r border-border-subtle">
+      <!-- Logo -->
+      <div class="p-5 border-b border-border-subtle">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-md">
+            <span class="material-symbols-outlined text-white text-xl">account_balance_wallet</span>
+          </div>
+          <div>
+            <h1 class="font-bold text-text-primary text-lg leading-tight">财务小管家</h1>
+            <p class="text-xs text-text-muted">轻量高效记账</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex-1 p-4 space-y-1">
+        <a class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface-container-low transition-all" data-page="dashboard" href="dashboard.html">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span class="font-medium">首页</span>
+        </a>
+        <a class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface-container-low transition-all" data-page="transactions" href="transactions.html">
+          <span class="material-symbols-outlined">receipt_long</span>
+          <span class="font-medium">账单明细</span>
+        </a>
+        <a class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface-container-low transition-all" data-page="analytics" href="analytics.html">
+          <span class="material-symbols-outlined">analytics</span>
+          <span class="font-medium">统计报表</span>
+        </a>
+        <a class="nav-link active flex items-center gap-3 px-4 py-3 rounded-xl transition-all" data-page="settings" href="settings.html">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="font-medium">个人设置</span>
+        </a>
+      </nav>
+
+      <!-- Budget Summary -->
+      <div class="p-4 border-t border-border-subtle">
+        <div class="bg-gradient-to-br from-secondary-container/30 to-surface-card rounded-xl p-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-text-secondary">本月预算</span>
+            <span class="material-symbols-outlined text-secondary text-base">savings</span>
+          </div>
+          <div class="text-2xl font-bold font-mono text-text-primary mb-3" id="budget-remaining">¥ 0.00</div>
+          <div class="w-full bg-surface-card-subtle h-2 rounded-full overflow-hidden">
+            <div class="bg-gradient-to-r from-secondary to-secondary-container h-full rounded-full transition-all" id="budget-progress" style="width: 0%"></div>
+          </div>
+          <div class="flex justify-between mt-2 text-xs text-text-muted">
+            <span id="budget-percent">已用 0%</span>
+            <span>¥ <span id="budget-total">15000</span> 总计</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- Top Header -->
+      <header class="h-16 flex-shrink-0 bg-surface-card/80 backdrop-blur-xl border-b border-border-subtle px-6 flex items-center justify-between">
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-2 text-text-secondary">
+            <span class="material-symbols-outlined text-lg">calendar_today</span>
+            <span class="text-sm font-medium" id="current-date">2026年10月09日</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-card-subtle hover:bg-surface-container-low text-text-secondary hover:text-text-primary text-sm transition-all border border-border-subtle" onclick="handleLogout(); return false;">
+            <span class="material-symbols-outlined text-base">logout</span>
+            <span>退出登录</span>
+          </button>
+          <div class="flex items-center gap-3 pl-4 border-l border-border-subtle">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary-container to-cat-dining flex items-center justify-center text-lg">👤</div>
+            <div>
+              <div class="text-sm font-semibold text-text-primary" id="user-display">用户名</div>
+              <div class="text-xs text-text-muted">个人主账本</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <main class="flex-1 overflow-auto p-6">
+        <div class="max-w-5xl mx-auto">
+          <!-- Page Title -->
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold text-text-primary">个人设置</h2>
+            <p class="text-text-secondary mt-1">管理您的账户和偏好设置</p>
+          </div>
+
+          <!-- Settings Grid -->
+          <div class="grid grid-cols-12 gap-6">
+            <!-- Left Column - Profile & Budget (6 cols) -->
+            <div class="col-span-12 lg:col-span-6 space-y-6">
+              <!-- Profile Card -->
+              <div class="card p-6">
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-xl">person</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-semibold text-text-primary">个人信息</h3>
+                    <p class="text-xs text-text-muted">您的账户基本信息</p>
+                  </div>
+                </div>
+                <div class="space-y-4">
+                  <div class="flex items-center gap-4 p-4 bg-surface-container-low rounded-xl">
+                    <div class="relative group cursor-pointer" onclick="document.getElementById('avatar-input').click()">
+                      <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary-container to-cat-dining flex items-center justify-center text-3xl shadow-md" id="profile-avatar">👤</div>
+                      <div class="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+                        <span class="material-symbols-outlined text-white text-xl">photo_camera</span>
+                      </div>
+                    </div>
+                    <input type="file" id="avatar-input" accept="image/*" class="hidden" onchange="handleAvatarChange(event)">
+                    <div class="flex-1">
+                      <div class="flex items-center gap-2">
+                        <div class="text-sm font-medium text-text-primary" id="profile-username">用户名</div>
+                        <button class="p-1 text-text-muted hover:text-primary transition-colors" onclick="enableEditUsername()" title="编辑昵称">
+                          <span class="material-symbols-outlined text-base">edit</span>
+                        </button>
+                      </div>
+                      <input type="text" id="username-input" class="hidden w-full mt-1 px-2 py-1 text-sm border border-border-focus rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30" maxlength="20">
+                      <div class="text-xs text-text-muted" id="profile-email">user@example.com</div>
+                    </div>
+                  </div>
+                  <div class="flex justify-end" id="save-btn-container" style="display: none;">
+                    <button class="px-4 py-2 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 transition-all text-sm" onclick="saveProfile()">保存修改</button>
+                  </div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 bg-surface-container-low rounded-xl">
+                      <div class="text-xs text-text-secondary mb-1">注册时间</div>
+                      <div class="text-sm font-medium text-text-primary" id="profile-created">-</div>
+                    </div>
+                    <div class="p-4 bg-surface-container-low rounded-xl">
+                      <div class="text-xs text-text-secondary mb-1">记录总数</div>
+                      <div class="text-sm font-medium text-text-primary" id="profile-records">0 条</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Budget Settings -->
+              <div class="card p-6">
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-xl">savings</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-semibold text-text-primary">预算设置</h3>
+                    <p class="text-xs text-text-muted">设置每月预算上限</p>
+                  </div>
+                </div>
+                <div class="space-y-4">
+                  <div>
+                    <label class="text-sm text-text-secondary mb-2 block">每月预算金额</label>
+                    <div class="flex items-center gap-3">
+                      <div class="flex-1 flex items-center bg-surface-container-low rounded-xl px-4 py-3">
+                        <span class="text-xl font-bold font-mono text-primary mr-2">¥</span>
+                        <input class="flex-1 bg-transparent text-xl font-bold font-mono text-text-primary focus:outline-none" id="budget-input" type="number" value="15000">
+                      </div>
+                      <button class="px-6 py-3 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 transition-all" onclick="saveBudget()">保存</button>
+                    </div>
+                  </div>
+                  <div class="p-4 bg-gradient-to-br from-secondary-container/30 to-surface-card rounded-xl">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-sm text-text-secondary">本月已使用</span>
+                      <span class="font-mono font-semibold text-primary" id="budget-used">¥ 0.00</span>
+                    </div>
+                    <div class="w-full bg-surface-card rounded-full h-2 overflow-hidden">
+                      <div class="bg-gradient-to-r from-secondary to-secondary-container h-full rounded-full transition-all" id="budget-bar" style="width: 0%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column - Data & Security (6 cols) -->
+            <div class="col-span-12 lg:col-span-6 space-y-6">
+              <!-- Data Export -->
+              <div class="card p-6">
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary-container to-surface-card flex items-center justify-center">
+                    <span class="material-symbols-outlined text-secondary text-xl">download</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-semibold text-text-primary">数据导出</h3>
+                    <p class="text-xs text-text-muted">备份您的所有数据</p>
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <button class="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all" onclick="exportData('json')">
+                    <div class="flex items-center gap-3">
+                      <span class="material-symbols-outlined text-text-secondary">code</span>
+                      <span class="font-medium text-text-primary">导出 JSON</span>
+                    </div>
+                    <span class="material-symbols-outlined text-text-muted">chevron_right</span>
+                  </button>
+                  <button class="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all" onclick="exportData('csv')">
+                    <div class="flex items-center gap-3">
+                      <span class="material-symbols-outlined text-text-secondary">table_chart</span>
+                      <span class="font-medium text-text-primary">导出 CSV</span>
+                    </div>
+                    <span class="material-symbols-outlined text-text-muted">chevron_right</span>
+                  </button>
+                  <button class="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all" onclick="exportData('xlsx')">
+                    <div class="flex items-center gap-3">
+                      <span class="material-symbols-outlined text-text-secondary">grid_on</span>
+                      <span class="font-medium text-text-primary">导出 Excel</span>
+                    </div>
+                    <span class="material-symbols-outlined text-text-muted">chevron_right</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Security -->
+              <div class="card p-6">
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cat-dining to-cat-transit flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-xl">security</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-semibold text-text-primary">安全设置</h3>
+                    <p class="text-xs text-text-muted">保护您的账户安全</p>
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <button class="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all" onclick="changePassword()">
+                    <div class="flex items-center gap-3">
+                      <span class="material-symbols-outlined text-text-secondary">lock</span>
+                      <span class="font-medium text-text-primary">修改密码</span>
+                    </div>
+                    <span class="material-symbols-outlined text-text-muted">chevron_right</span>
+                  </button>
+                  <button class="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-all" onclick="clearRecords()">
+                    <div class="flex items-center gap-3">
+                      <span class="material-symbols-outlined text-error">delete_forever</span>
+                      <span class="font-medium text-error">清空记录</span>
+                    </div>
+                    <span class="material-symbols-outlined text-text-muted">chevron_right</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Danger Zone -->
+              <div class="card p-6 border border-error/20 bg-error/5">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-xl bg-error/10 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-error text-xl">warning</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-semibold text-error">危险区域</h3>
+                    <p class="text-xs text-text-muted">以下操作不可逆</p>
+                  </div>
+                </div>
+                <button class="w-full py-3 rounded-xl border-2 border-error text-error font-medium hover:bg-error hover:text-white transition-all" onclick="deleteAccount()">
+                  删除账户
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast fixed bottom-6 right-6 bg-text-primary text-surface-card px-5 py-3 rounded-xl shadow-lg flex items-center gap-3 opacity-0 translate-y-4 transition-all duration-300 z-50" id="toast-message">
+    <span class="material-symbols-outlined" id="toast-icon">check_circle</span>
+    <span id="toast-text">操作成功</span>
+  </div>
+
+  <style>
+    .nav-link.active {
+      background: linear-gradient(135deg, #ffd4d8 0%, #ffb5ba 100%);
+      color: #5c2a30;
+    }
+    .toast.show {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+  </style>
+
+  <script>
+    const Storage = {
+      get(key) { try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; } },
+      set(key, v) { try { localStorage.setItem(key, JSON.stringify(v)); return true; } catch (e) { return false; } },
+      remove(key) { try { localStorage.removeItem(key); return true; } catch (e) { return false; } }
+    };
+    const Auth = {
+      getSession() { return Storage.get('fm_session'); },
+      getCurrentUser() {
+        const s = this.getSession();
+        if (!s) return null;
+        return (Storage.get('fm_users') || []).find(u => u.id === s.userId);
+      },
+      isLoggedIn() { return !!this.getSession(); },
+      logout() { Storage.remove('fm_session'); }
+    };
+    const Records = {
+      getAll: () => Storage.get('fm_records') || [],
+      getByUser: (uid) => Records.getAll().filter(r => r.userId === uid)
+    };
+    const Budget = {
+      get: () => Storage.get('fm_budget') || { amount: 15000 },
+      set(b) { Storage.set('fm_budget', b); },
+      getRemaining(uid) {
+        const b = Budget.get();
+        const now = new Date();
+        const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+        const recs = Records.getByUser(uid).filter(r => {
+          const d = new Date(r.date);
+          return d >= startDate && d <= endDate && r.type === 'expense';
+        });
+        return b.amount - recs.reduce((s, r) => s + parseFloat(r.amount), 0);
+      }
+    };
+
+    function checkAuth() { if (!Auth.isLoggedIn()) { window.location.href = '../index.html'; return false; } return true; }
+    function getUser() { const u = Auth.getCurrentUser(); if (!u) window.location.href = '../index.html'; return u; }
+    function handleLogout() { Auth.logout(); window.location.href = '../index.html'; }
+    function navigateTo(page) { window.location.href = page + '.html'; }
+
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast-message');
+      document.getElementById('toast-text').textContent = msg;
+      document.getElementById('toast-icon').textContent = type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info';
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    function saveBudget() {
+      const amount = parseFloat(document.getElementById('budget-input').value);
+      if (!amount || amount <= 0) {
+        showToast('请输入有效金额', 'error');
+        return;
+      }
+      Budget.set({ amount });
+      const user = getUser();
+      if (user) loadBudgetStats();
+      showToast('预算已保存');
+    }
+
+    function loadBudgetStats() {
+      const user = getUser();
+      if (!user) return;
+      const budget = Budget.get();
+      const remaining = Budget.getRemaining(user.id);
+      const used = budget.amount - remaining;
+      const usage = budget.amount > 0 ? (used / budget.amount * 100) : 0;
+
+      document.getElementById('budget-remaining').textContent = `¥ ${remaining.toFixed(2)}`;
+      document.getElementById('budget-progress').style.width = `${usage}%`;
+      document.getElementById('budget-percent').textContent = `已用 ${usage.toFixed(1)}%`;
+      document.getElementById('budget-total').textContent = budget.amount.toFixed(0);
+
+      document.getElementById('budget-input').value = budget.amount.toFixed(0);
+      document.getElementById('budget-used').textContent = `¥ ${used.toFixed(2)}`;
+      document.getElementById('budget-bar').style.width = `${usage}%`;
+    }
+
+    function loadProfile() {
+      const user = getUser();
+      if (!user) return;
+      document.getElementById('user-display').textContent = user.username;
+      document.getElementById('profile-username').textContent = user.username;
+      document.getElementById('username-input').value = user.username;
+      document.getElementById('profile-email').textContent = user.email || '未设置邮箱';
+      document.getElementById('profile-created').textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString('zh-CN') : '-';
+      document.getElementById('profile-records').textContent = `${Records.getByUser(user.id).length} 条`;
+      if (user.avatar) {
+        document.getElementById('profile-avatar').innerHTML = `<img src="${user.avatar}" class="w-full h-full rounded-full object-cover">`;
+      }
+    }
+
+    let originalUsername = '';
+    function enableEditUsername() {
+      const usernameDisplay = document.getElementById('profile-username');
+      const usernameInput = document.getElementById('username-input');
+      const saveBtn = document.getElementById('save-btn-container');
+      originalUsername = usernameDisplay.textContent;
+      usernameDisplay.style.display = 'none';
+      usernameInput.style.display = 'block';
+      usernameInput.focus();
+      saveBtn.style.display = 'block';
+      usernameInput.addEventListener('input', () => {
+        document.getElementById('save-btn-container').querySelector('button').disabled = usernameInput.value === originalUsername;
+      });
+    }
+
+    function handleAvatarChange(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const avatarData = e.target.result;
+        document.getElementById('profile-avatar').innerHTML = `<img src="${avatarData}" class="w-full h-full rounded-full object-cover">`;
+        document.getElementById('save-btn-container').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveProfile() {
+      const user = getUser();
+      if (!user) return;
+      const newUsername = document.getElementById('username-input').value.trim();
+      if (!newUsername) {
+        showToast('用户名不能为空', 'error');
+        return;
+      }
+      if (newUsername.length < 2 || newUsername.length > 20) {
+        showToast('用户名长度需在2-20个字符之间', 'error');
+        return;
+      }
+      const users = Storage.get('fm_users') || [];
+      const userIndex = users.findIndex(u => u.id === user.id);
+      if (userIndex !== -1) {
+        users[userIndex].username = newUsername;
+        if (document.getElementById('profile-avatar').querySelector('img')) {
+          users[userIndex].avatar = document.getElementById('profile-avatar').querySelector('img').src;
+        }
+        Storage.set('fm_users', users);
+        document.getElementById('profile-username').textContent = newUsername;
+        document.getElementById('profile-username').style.display = 'block';
+        document.getElementById('username-input').style.display = 'none';
+        document.getElementById('save-btn-container').style.display = 'none';
+        loadProfile();
+        showToast('保存成功');
+      }
+    }
+
+    function exportData(format) {
+      const user = getUser();
+      if (!user) return;
+      const records = Records.getByUser(user.id);
+      if (records.length === 0) {
+        showToast('暂无数据可导出', 'error');
+        return;
+      }
+      const date = new Date().toISOString().split('T')[0];
+      if (format === 'json') {
+        const content = JSON.stringify(records, null, 2);
+        const blob = new Blob([content], { type: 'application/json' });
+        downloadBlob(blob, `财务记录_${date}.json`);
+        showToast(`已导出 财务记录_${date}.json`);
+      } else if (format === 'csv') {
+        const headers = ['日期', '类型', '分类', '金额', '备注', '支付方式'];
+        const rows = records.map(r => [r.date, r.type === 'expense' ? '支出' : '收入', r.categoryName, r.amount, r.note || '', r.channel]);
+        const content = [headers, ...rows].map(r => r.join(',')).join('\n');
+        const blob = new Blob(['﻿' + content], { type: 'text/csv;charset=utf-8' });
+        downloadBlob(blob, `财务记录_${date}.csv`);
+        showToast(`已导出 财务记录_${date}.csv`);
+      } else if (format === 'xlsx') {
+        const data = records.map(r => ({
+          '日期': r.date,
+          '类型': r.type === 'expense' ? '支出' : '收入',
+          '分类': r.categoryName,
+          '金额': parseFloat(r.amount),
+          '备注': r.note || '',
+          '支付方式': r.channel
+        }));
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '财务记录');
+        XLSX.writeFile(wb, `财务记录_${date}.xlsx`);
+        showToast(`已导出 财务记录_${date}.xlsx`);
+      }
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function changePassword() {
+      showToast('功能开发中', 'info');
+    }
+
+    function clearRecords() {
+      if (!confirm('确定要清空所有记账记录吗？此操作不可恢复！')) return;
+      const user = getUser();
+      if (!user) return;
+      const all = Storage.get('fm_records') || [];
+      Storage.set('fm_records', all.filter(r => r.userId !== user.id));
+      showToast('记录已清空');
+      loadBudgetStats();
+    }
+
+    function deleteAccount() {
+      if (!confirm('确定要删除账户吗？所有数据将被永久删除！')) return;
+      if (!confirm('这是最后一次确认，点击确定后将删除账户并退出登录')) return;
+      const user = getUser();
+      if (!user) return;
+      const users = Storage.get('fm_users') || [];
+      Storage.set('fm_users', users.filter(u => u.id !== user.id));
+      const all = Storage.get('fm_records') || [];
+      Storage.set('fm_records', all.filter(r => r.userId !== user.id));
+      Auth.logout();
+      showToast('账户已删除');
+      setTimeout(() => window.location.href = '../index.html', 1000);
+    }
+
+    function updateHeader() {
+      const now = new Date();
+      const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+      document.getElementById('current-date').textContent = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 ${days[now.getDay()]}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!checkAuth()) return;
+      updateHeader();
+      loadProfile();
+      loadBudgetStats();
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.toggle('active', link.dataset.page === 'settings');
+      });
+    });
+  </script>
+</body>
+</html>

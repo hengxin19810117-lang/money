@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>财务小管家 - 统计报表</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#a05a63',
+            'primary-container': '#ffd4d8',
+            'on-primary-container': '#5c2a30',
+            secondary: '#2d8b74',
+            'secondary-container': '#b8f0e0',
+            'on-secondary-container': '#1a5c47',
+            'cat-dining': '#f8a5ab',
+            'cat-transit': '#ffc2d5',
+            'cat-shopping': '#ffb3d1',
+            'cat-housing': '#ffd6e2',
+            'cat-entertainment': '#d4bfff',
+            'cat-medical': '#ffeb99',
+            'cat-education': '#a8d8ff',
+            'cat-other': '#b8e6e6',
+            'cat-income': '#6fcfb8',
+            'surface-card': '#FFFFFF',
+            'surface-card-subtle': '#f0f3f8',
+            'surface-container-low': '#eef2fa',
+            'surface-container-high': '#ced9ec',
+            'surface-canvas': '#f0f4f9',
+            'text-primary': '#1a2332',
+            'text-secondary': '#5a6577',
+            'text-muted': '#8896a8',
+            'border-subtle': '#d0d8e4',
+            'border-focus': '#f8a5ab',
+            error: '#dc2626'
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Noto Sans SC', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+    body { font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif; }
+    ::-webkit-scrollbar { display: none; }
+    .card { background: var(--color-surface-card); border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06); }
+    .sidebar { background: linear-gradient(180deg, #ffffff 0%, #f8fafd 100%); }
+  </style>
+</head>
+<body class="bg-surface-canvas text-text-primary antialiased">
+  <div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar w-64 flex-shrink-0 flex flex-col border-r border-border-subtle">
+      <!-- Logo -->
+      <div class="p-5 border-b border-border-subtle">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-md">
+            <span class="material-symbols-outlined text-white text-xl">account_balance_wallet</span>
+          </div>
+          <div>
+            <h1 class="font-bold text-text-primary text-lg leading-tight">财务小管家</h1>
+            <p class="text-xs text-text-muted">轻量高效记账</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex-1 p-4 space-y-1">
+        <a class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface-container-low transition-all" data-page="dashboard" href="dashboard.html">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span class="font-medium">首页</span>
+        </a>
+        <a class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface-container-low transition-all" data-page="transactions" href="transactions.html">
+          <span class="material-symbols-outlined">receipt_long</span>
+          <span class="font-medium">账单明细</span>
+        </a>
+        <a class="nav-link active flex items-center gap-3 px-4 py-3 rounded-xl transition-all" data-page="analytics" href="analytics.html">
+          <span class="material-symbols-outlined">analytics</span>
+          <span class="font-medium">统计报表</span>
+        </a>
+        <a class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface-container-low transition-all" data-page="settings" href="settings.html">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="font-medium">个人设置</span>
+        </a>
+      </nav>
+
+      <!-- Budget Summary -->
+      <div class="p-4 border-t border-border-subtle">
+        <div class="bg-gradient-to-br from-secondary-container/30 to-surface-card rounded-xl p-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-text-secondary">本月预算</span>
+            <span class="material-symbols-outlined text-secondary text-base">savings</span>
+          </div>
+          <div class="text-2xl font-bold font-mono text-text-primary mb-3" id="budget-remaining">¥ 0.00</div>
+          <div class="w-full bg-surface-card-subtle h-2 rounded-full overflow-hidden">
+            <div class="bg-gradient-to-r from-secondary to-secondary-container h-full rounded-full transition-all" id="budget-progress" style="width: 0%"></div>
+          </div>
+          <div class="flex justify-between mt-2 text-xs text-text-muted">
+            <span id="budget-percent">已用 0%</span>
+            <span>¥ <span id="budget-total">15000</span> 总计</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- Top Header -->
+      <header class="h-16 flex-shrink-0 bg-surface-card/80 backdrop-blur-xl border-b border-border-subtle px-6 flex items-center justify-between">
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-2 text-text-secondary">
+            <span class="material-symbols-outlined text-lg">calendar_today</span>
+            <span class="text-sm font-medium" id="current-date">2026年10月09日</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-card-subtle hover:bg-surface-container-low text-text-secondary hover:text-text-primary text-sm transition-all border border-border-subtle" onclick="handleLogout(); return false;">
+            <span class="material-symbols-outlined text-base">logout</span>
+            <span>退出登录</span>
+          </button>
+          <div class="flex items-center gap-3 pl-4 border-l border-border-subtle">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary-container to-cat-dining flex items-center justify-center text-lg">👤</div>
+            <div>
+              <div class="text-sm font-semibold text-text-primary" id="user-display">用户名</div>
+              <div class="text-xs text-text-muted">个人主账本</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <main class="flex-1 overflow-auto p-6">
+        <div class="max-w-7xl mx-auto">
+          <!-- Page Title -->
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-bold text-text-primary">统计报表</h2>
+              <p class="text-text-secondary mt-1">多维度分析您的收支情况</p>
+            </div>
+            <select class="text-sm bg-surface-card border border-border-subtle rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-border-focus shadow-sm" id="month-select" onchange="loadAnalytics()">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <!-- Main Grid -->
+          <div class="grid grid-cols-12 gap-6">
+            <!-- Left Column - Pie Chart (6 cols) -->
+            <div class="col-span-12 lg:col-span-6">
+              <div class="card p-6">
+                <div class="flex items-center justify-between mb-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-container to-secondary-container flex items-center justify-center">
+                      <span class="material-symbols-outlined text-white text-xl">pie_chart</span>
+                    </div>
+                    <div>
+                      <h3 class="text-lg font-semibold text-text-primary">支出分类占比</h3>
+                      <p class="text-xs text-text-muted">本月支出分布</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="relative h-72">
+                  <canvas id="expenseChart"></canvas>
+                </div>
+                <div class="mt-6 flex flex-col gap-2" id="category-legend">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column - Top 3 & Summary (6 cols) -->
+            <div class="col-span-12 lg:col-span-6 space-y-6">
+              <!-- Top 3 Ranking -->
+              <div class="card p-6">
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-cat-dining flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-xl">emoji_events</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-semibold text-text-primary">支出 Top 3</h3>
+                    <p class="text-xs text-text-muted">本月消费最高分类</p>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-4" id="top3-list">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- Month Summary -->
+              <div class="card p-6">
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-xl">account_balance</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-semibold text-text-primary">月度概要</h3>
+                    <p class="text-xs text-text-muted">本月财务状况总览</p>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="bg-gradient-to-br from-cat-dining/20 to-surface-card rounded-xl p-4">
+                    <div class="text-xs text-text-secondary mb-1">本月总支出</div>
+                    <div class="text-xl font-bold font-mono text-primary" id="month-expense">¥ 0.00</div>
+                  </div>
+                  <div class="bg-gradient-to-br from-cat-income/20 to-surface-card rounded-xl p-4">
+                    <div class="text-xs text-text-secondary mb-1">本月总收入</div>
+                    <div class="text-xl font-bold font-mono text-secondary" id="month-income">¥ 0.00</div>
+                  </div>
+                  <div class="col-span-2 bg-gradient-to-br from-primary-container/30 to-surface-card rounded-xl p-4">
+                    <div class="text-xs text-text-secondary mb-1">本月结余</div>
+                    <div class="text-2xl font-bold font-mono text-text-primary" id="month-balance">¥ 0.00</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <style>
+    .nav-link.active {
+      background: linear-gradient(135deg, #ffd4d8 0%, #ffb5ba 100%);
+      color: #5c2a30;
+    }
+  </style>
+
+  <script>
+    const Storage = {
+      get(key) { try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; } }
+    };
+    const Auth = {
+      getSession: () => Storage.get('fm_session'),
+      getCurrentUser() {
+        const s = this.getSession();
+        if (!s) return null;
+        return (Storage.get('fm_users') || []).find(u => u.id === s.userId);
+      },
+      isLoggedIn() { return !!this.getSession(); }
+    };
+    const Records = {
+      getAll: () => Storage.get('fm_records') || [],
+      getByUser: (uid) => Records.getAll().filter(r => r.userId === uid)
+    };
+    const Budget = {
+      get: () => Storage.get('fm_budget') || { amount: 15000 },
+      getRemaining(uid) {
+        const b = Budget.get();
+        const now = new Date();
+        const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+        const recs = Records.getByUser(uid).filter(r => {
+          const d = new Date(r.date);
+          return d >= startDate && d <= endDate && r.type === 'expense';
+        });
+        return b.amount - recs.reduce((s, r) => s + parseFloat(r.amount), 0);
+      }
+    };
+
+    let expenseChart = null;
+
+    function checkAuth() { if (!Auth.isLoggedIn()) { window.location.href = '../index.html'; return false; } return true; }
+    function getUser() { const u = Auth.getCurrentUser(); if (!u) window.location.href = '../index.html'; return u; }
+    function handleLogout() { Auth.logout(); window.location.href = '../index.html'; }
+    function navigateTo(page) { window.location.href = page + '.html'; }
+
+    function initMonthSelect() {
+      const sel = document.getElementById('month-select');
+      const now = new Date();
+      let options = '';
+      for (let i = 0; i < 12; i++) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        const label = `${d.getFullYear()}年${d.getMonth() + 1}月`;
+        options += `<option value="${val}">${label}</option>`;
+      }
+      sel.innerHTML = options;
+    }
+
+    function loadAnalytics() {
+      const user = getUser();
+      if (!user) return;
+      const monthVal = document.getElementById('month-select').value;
+      const [y, m] = monthVal.split('-').map(Number);
+      const startDate = new Date(y, m - 1, 1);
+      const endDate = new Date(y, m, 0, 23, 59, 59);
+      const allUserRecords = Records.getByUser(user.id);
+      const records = allUserRecords.filter(r => {
+        const d = new Date(r.date);
+        return d >= startDate && d <= endDate;
+      });
+      const expenses = records.filter(r => r.type === 'expense');
+      const income = records.filter(r => r.type === 'income');
+      const expTotal = expenses.reduce((s, r) => s + parseFloat(r.amount), 0);
+      const incTotal = income.reduce((s, r) => s + parseFloat(r.amount), 0);
+      document.getElementById('month-expense').textContent = `¥ ${expTotal.toFixed(2)}`;
+      document.getElementById('month-income').textContent = `¥ ${incTotal.toFixed(2)}`;
+      document.getElementById('month-balance').textContent = `¥ ${(incTotal - expTotal).toFixed(2)}`;
+
+      // Group by category
+      const grouped = {};
+      expenses.forEach(r => {
+        if (!grouped[r.categoryId]) {
+          grouped[r.categoryId] = { name: r.categoryName, icon: r.icon, color: r.color, total: 0 };
+        }
+        grouped[r.categoryId].total += parseFloat(r.amount);
+      });
+      const sorted = Object.values(grouped).sort((a, b) => b.total - a.total);
+
+      // Top 3
+      const top3 = sorted.slice(0, 3);
+      const top3Html = top3.length === 0
+        ? '<div class="text-center text-text-muted py-8"><span class="material-symbols-outlined text-4xl text-surface-container-high">emoji_events</span><p class="mt-2">暂无支出数据</p></div>'
+        : top3.map((item, i) => {
+            const pct = expTotal > 0 ? (item.total / expTotal * 100) : 0;
+            const medals = ['🥇', '🥈', '🥉'];
+            return `
+              <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all">
+                <span class="text-2xl">${medals[i]}</span>
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl" style="background:${item.color}">${item.icon}</div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="font-semibold text-text-primary">${item.name}</span>
+                    <span class="font-mono font-bold text-primary">¥ ${item.total.toFixed(2)}</span>
+                  </div>
+                  <div class="w-full bg-surface-card rounded-full h-2 mt-2">
+                    <div class="h-full rounded-full transition-all" style="width:${pct}%;background:${item.color}"></div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+      document.getElementById('top3-list').innerHTML = top3Html;
+
+      // Pie Chart
+      if (expenseChart) expenseChart.destroy();
+      const ctx = document.getElementById('expenseChart').getContext('2d');
+      expenseChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: sorted.map(s => s.name),
+          datasets: [{
+            data: sorted.map(s => s.total),
+            backgroundColor: sorted.map(s => s.color),
+            borderWidth: 0,
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '65%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ` ${ctx.label}: ¥${ctx.raw.toFixed(2)} (${((ctx.raw / expTotal) * 100).toFixed(1)}%)`
+              }
+            }
+          }
+        }
+      });
+
+      // Legend
+      const legendHtml = sorted.length === 0
+        ? '<div class="text-center text-text-muted py-4">暂无分类数据</div>'
+        : sorted.map(s => `
+          <div class="flex items-center gap-3 text-sm p-2 rounded-lg hover:bg-surface-container-low transition-all">
+            <span class="w-4 h-4 rounded-full shadow-sm" style="background:${s.color}"></span>
+            <span class="flex-1">${s.icon} ${s.name}</span>
+            <span class="font-mono font-semibold text-text-primary">¥${s.total.toFixed(2)}</span>
+          </div>
+        `).join('');
+      document.getElementById('category-legend').innerHTML = legendHtml;
+
+      // Update budget sidebar
+      const rem = Budget.getRemaining(user.id);
+      const budget = Budget.get();
+      document.getElementById('budget-remaining').textContent = `¥ ${rem.toFixed(2)}`;
+      const usage = budget.amount > 0 ? ((budget.amount - rem) / budget.amount * 100) : 0;
+      document.getElementById('budget-progress').style.width = `${usage}%`;
+      document.getElementById('budget-percent').textContent = `已用 ${usage.toFixed(1)}%`;
+      document.getElementById('budget-total').textContent = budget.amount.toFixed(0);
+    }
+
+    function updateHeader() {
+      const now = new Date();
+      const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+      document.getElementById('current-date').textContent = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 ${days[now.getDay()]}`;
+      const user = getUser();
+      if (user) document.getElementById('user-display').textContent = user.username;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!checkAuth()) return;
+      initMonthSelect();
+      updateHeader();
+      loadAnalytics();
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.toggle('active', link.dataset.page === 'analytics');
+      });
+    });
+  </script>
+</body>
+</html>

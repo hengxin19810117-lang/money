@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>财务小管家 - 注册</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#a05a63',
+            'primary-container': '#ffd4d8',
+            'on-primary-container': '#5c2a30',
+            secondary: '#2d8b74',
+            'secondary-container': '#b8f0e0',
+            'on-secondary-container': '#1a5c47',
+            'cat-dining': '#f8a5ab',
+            'cat-transit': '#ffc2d5',
+            'cat-income': '#6fcfb8',
+            'cat-housing': '#ffd6e2',
+            'surface-card': '#FFFFFF',
+            'surface-card-subtle': '#f0f3f8',
+            'surface-container-low': '#eef2fa',
+            'surface-container-high': '#ced9ec',
+            'surface-canvas': '#f0f4f9',
+            'text-primary': '#1a2332',
+            'text-secondary': '#5a6577',
+            'text-muted': '#8896a8',
+            'border-subtle': '#d0d8e4',
+            'border-focus': '#f8a5ab',
+            error: '#dc2626'
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Noto Sans SC', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+    body { font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif; }
+  </style>
+</head>
+<body class="bg-surface-canvas text-text-primary min-h-screen flex flex-col selection:bg-primary-fixed selection:text-on-primary-fixed">
+  <!-- Header -->
+  <header class="w-full bg-surface-card border-b border-border-subtle py-3 px-8 sticky top-0 z-30 shadow-sm backdrop-blur-md bg-opacity-95">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a class="flex items-center gap-2 group transition-transform hover:scale-105" href="#">
+          <div class="size-8 rounded-lg bg-cat-housing flex items-center justify-center text-primary shadow-xs">
+            <svg class="size-5" fill="currentColor" viewBox="0 0 48 48">
+              <path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill-rule="evenodd"></path>
+              <path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill-rule="evenodd"></path>
+            </svg>
+          </div>
+          <span class="text-text-primary text-base font-bold tracking-tight">财务小管家</span>
+        </a>
+        <div class="h-4 w-px bg-border-subtle mx-2"></div>
+        <span class="text-xs text-text-muted bg-surface-card-subtle px-2.5 py-0.5 rounded-full font-medium border border-border-subtle">个人财务工作台</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a class="flex items-center gap-1.5 text-xs text-text-secondary hover:text-primary transition-colors" href="#login">
+          <span class="material-symbols-outlined text-sm">arrow_back</span>
+          <span>返回登录</span>
+        </a>
+        <div class="flex items-center gap-1 text-xs text-secondary bg-secondary-container/40 px-2.5 py-1 rounded-full font-medium">
+          <span class="material-symbols-outlined text-xs">verified_user</span>
+          <span>端侧高等级数据加密</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-5xl bg-surface-card rounded-2xl border border-border-subtle shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[600px]">
+      <!-- Left Brand Column (5 cols) -->
+      <div class="lg:col-span-5 bg-gradient-to-br from-cat-housing/40 via-surface-card to-cat-dining/20 p-8 lg:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-border-subtle relative overflow-hidden">
+        <div class="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-cat-dining/30 blur-2xl pointer-events-none"></div>
+        <div class="absolute -bottom-20 -left-16 w-52 h-52 rounded-full bg-secondary-container/30 blur-2xl pointer-events-none"></div>
+
+        <div class="relative z-10">
+          <!-- Mascot Badge -->
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card/90 border border-border-subtle shadow-xs mb-6">
+            <span class="size-2 rounded-full bg-secondary"></span>
+            <span class="text-xs font-semibold text-text-secondary tracking-wide uppercase">PRD 规范账本</span>
+          </div>
+
+          <h1 class="text-2xl lg:text-3xl font-extrabold text-text-primary tracking-tight leading-snug">
+            创建您的<br/>
+            <span class="text-primary font-black">专属轻量财务账本</span>
+          </h1>
+          <p class="mt-3 text-sm text-text-secondary leading-relaxed">
+            告别繁琐账务记账体系，享受3秒沉浸式极速收支录入，多维度预算预警陪伴您的每一步财务自由之路。
+          </p>
+
+          <!-- Feature Value Badges -->
+          <div class="mt-8 space-y-3.5">
+            <div class="flex items-start gap-3.5 p-3 rounded-xl bg-surface-card/80 border border-border-subtle/80 shadow-xs hover:border-cat-dining transition-all">
+              <div class="size-8 rounded-lg bg-cat-dining/50 text-on-primary-container flex items-center justify-center shrink-0 mt-0.5">
+                <span class="material-symbols-outlined text-lg">bolt</span>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-text-primary">3秒极速记账</h4>
+                <p class="text-xs text-text-muted mt-0.5">支持回车即存、桌面快捷面板及多分类快速归档</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3.5 p-3 rounded-xl bg-surface-card/80 border border-border-subtle/80 shadow-xs hover:border-cat-dining transition-all">
+              <div class="size-8 rounded-lg bg-cat-transit/60 text-on-primary-container flex items-center justify-center shrink-0 mt-0.5">
+                <span class="material-symbols-outlined text-lg">trending_up</span>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-text-primary">预算动态预警</h4>
+                <p class="text-xs text-text-muted mt-0.5">80% 警戒线主动通知与智能超支防线保护</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3.5 p-3 rounded-xl bg-surface-card/80 border border-border-subtle/80 shadow-xs hover:border-cat-dining transition-all">
+              <div class="size-8 rounded-lg bg-cat-income/50 text-secondary flex items-center justify-center shrink-0 mt-0.5">
+                <span class="material-symbols-outlined text-lg">security</span>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-text-primary">离线本地缓存保障</h4>
+                <p class="text-xs text-text-muted mt-0.5">无网络亦可秒级记账，私密数据纯本地加密驻留</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy Footer -->
+        <div class="relative z-10 mt-8 pt-4 border-t border-border-subtle/60 flex items-center gap-3">
+          <div class="size-7 rounded-full bg-surface-card flex items-center justify-center text-text-muted border border-border-subtle shrink-0">
+            <span class="material-symbols-outlined text-xs">lock</span>
+          </div>
+          <p class="text-[11px] text-text-muted leading-tight">
+            严格遵循 PRD 规范：采用独立无依赖离线存储架构，保护每一笔家庭及个人资产隐私。
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Registration Form Column (7 cols) -->
+      <div class="lg:col-span-7 p-8 lg:p-12 flex flex-col justify-between bg-surface-card">
+        <div>
+          <!-- Form Header -->
+          <div class="flex items-center justify-between pb-6 border-b border-border-subtle">
+            <div>
+              <h2 class="text-xl font-bold text-text-primary tracking-tight">创建新账号</h2>
+              <p class="text-xs text-text-secondary mt-1">填写基础凭证信息，30秒内即可激活个人账簿</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-text-muted block">已有小管家账号？</span>
+              <a class="text-xs font-bold text-primary hover:text-on-primary-container transition-colors inline-flex items-center gap-0.5 mt-0.5" href="#login">
+                立即登录 <span class="material-symbols-outlined text-xs">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Registration Form -->
+          <form class="mt-6 space-y-5" id="registerForm" onsubmit="event.preventDefault(); handleSubmit();">
+            <!-- Username Field -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-semibold text-text-primary flex items-center gap-1" for="username">
+                  用户名 <span class="text-error">*</span>
+                </label>
+                <div class="flex items-center gap-1 text-[11px] font-medium transition-all" id="usernameStatus">
+                  <span class="material-symbols-outlined text-xs text-text-muted">radio_button_unchecked</span>
+                  <span class="text-text-muted">待输入</span>
+                </div>
+              </div>
+              <div class="relative rounded-lg shadow-sm">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+                  <span class="material-symbols-outlined text-base">person</span>
+                </div>
+                <input class="block w-full rounded-lg border border-border-subtle bg-surface-card pl-10 pr-10 py-2.5 text-xs text-text-primary placeholder:text-text-muted focus:border-border-focus focus:ring-2 focus:ring-border-focus/30 transition-all outline-none font-medium" id="username" oninput="handleUsernameInput(this.value)" placeholder="3-20位字母或数字，唯一标识" required type="text">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <span class="material-symbols-outlined text-secondary text-base" id="usernameValidIcon">radio_button_unchecked</span>
+                </div>
+              </div>
+              <p class="text-[11px] text-text-muted">支持英文字母、数字组合，用于日常登录验证及账本归属</p>
+            </div>
+
+            <!-- Password Field -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-semibold text-text-primary flex items-center gap-1" for="password">
+                  设置密码 <span class="text-error">*</span>
+                </label>
+                <span class="text-[11px] text-text-muted">6-20位字符</span>
+              </div>
+              <div class="relative rounded-lg shadow-sm">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+                  <span class="material-symbols-outlined text-base">lock</span>
+                </div>
+                <input class="block w-full rounded-lg border border-border-subtle bg-surface-card pl-10 pr-10 py-2.5 text-xs text-text-primary placeholder:text-text-muted focus:border-border-focus focus:ring-2 focus:ring-border-focus/30 transition-all outline-none font-medium" id="password" oninput="evaluatePasswordStrength(this.value)" placeholder="6-20位字母、数字或符号" required type="password">
+                <button class="absolute inset-y-0 right-0 flex items-center pr-3 text-text-muted hover:text-text-primary focus:outline-none" onclick="togglePasswordVisibility('password', 'toggleEyeIcon1')" title="切换可见性" type="button">
+                  <span class="material-symbols-outlined text-base" id="toggleEyeIcon1">visibility_off</span>
+                </button>
+              </div>
+              <!-- Password Strength Bar -->
+              <div class="pt-1 space-y-1.5">
+                <div class="flex items-center justify-between text-[11px]">
+                  <span class="text-text-muted">安全强度：<span class="font-bold text-text-muted" id="strengthText">待评估</span></span>
+                </div>
+                <div class="grid grid-cols-3 gap-1.5 h-1.5 w-full rounded-full bg-surface-card-subtle overflow-hidden">
+                  <div class="h-full rounded-full bg-surface-card-subtle transition-all duration-300" id="bar1"></div>
+                  <div class="h-full rounded-full bg-surface-card-subtle transition-all duration-300" id="bar2"></div>
+                  <div class="h-full rounded-full bg-surface-card-subtle transition-all duration-300" id="bar3"></div>
+                </div>
+                <div class="flex flex-wrap gap-x-4 gap-y-1 text-[11px]">
+                  <span class="inline-flex items-center gap-1 text-text-muted font-normal" id="reqLength">
+                    <span class="material-symbols-outlined text-xs">radio_button_unchecked</span> 至少6个字符
+                  </span>
+                  <span class="inline-flex items-center gap-1 text-text-muted font-normal" id="reqLetters">
+                    <span class="material-symbols-outlined text-xs">radio_button_unchecked</span> 包含英文字母
+                  </span>
+                  <span class="inline-flex items-center gap-1 text-text-muted font-normal" id="reqNumbers">
+                    <span class="material-symbols-outlined text-xs">radio_button_unchecked</span> 包含数字或符号
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-semibold text-text-primary flex items-center gap-1" for="confirmPassword">
+                  确认密码 <span class="text-error">*</span>
+                </label>
+                <div class="flex items-center gap-1 text-[11px] font-medium" id="matchBadge">
+                  <span class="material-symbols-outlined text-xs text-text-muted">radio_button_unchecked</span>
+                  <span class="text-text-muted">待确认</span>
+                </div>
+              </div>
+              <div class="relative rounded-lg shadow-sm">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+                  <span class="material-symbols-outlined text-base">verified</span>
+                </div>
+                <input class="block w-full rounded-lg border border-border-subtle bg-surface-card pl-10 pr-10 py-2.5 text-xs text-text-primary placeholder:text-text-muted focus:border-border-focus focus:ring-2 focus:ring-border-focus/30 transition-all outline-none font-medium" id="confirmPassword" oninput="checkPasswordMatch()" placeholder="请再次输入密码进行确认" required type="password">
+                <button class="absolute inset-y-0 right-0 flex items-center pr-3 text-text-muted hover:text-text-primary focus:outline-none" onclick="togglePasswordVisibility('confirmPassword', 'toggleEyeIcon2')" title="切换可见性" type="button">
+                  <span class="material-symbols-outlined text-base" id="toggleEyeIcon2">visibility_off</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Terms Checkbox -->
+            <div class="pt-1">
+              <label class="flex items-start gap-2.5 cursor-pointer select-none">
+                <input checked class="size-4 mt-0.5 rounded border-outline-variant text-primary focus:ring-border-focus cursor-pointer" id="termsCheckbox" onchange="validateFormState()" type="checkbox">
+                <span class="text-xs text-text-secondary leading-snug">
+                  我已阅读并完全同意 <a class="text-primary font-semibold hover:underline" href="#">《服务条款》</a> 与 <a class="text-primary font-semibold hover:underline" href="#">《个人数据离线隐私保护政策》</a>，知晓本账本支持纯离线存储与多端备份。
+                </span>
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-2">
+              <button class="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-cat-dining hover:bg-primary-container active:scale-[0.99] text-on-primary-container font-bold text-sm tracking-wide shadow-sm hover:shadow-md transition-all cursor-pointer border border-primary-container/50" id="submitBtn" type="submit">
+                <span class="material-symbols-outlined text-lg">how_to_reg</span>
+                <span>完成注册并开启记账</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- PRD Guarantee Note -->
+        <div class="mt-6 pt-4 border-t border-border-subtle bg-surface-card-subtle/70 rounded-xl p-3.5 flex items-center justify-between gap-3 border">
+          <div class="flex items-center gap-2.5">
+            <span class="material-symbols-outlined text-secondary text-lg">encrypted</span>
+            <div class="text-[11px] text-text-secondary leading-tight">
+              <span class="font-bold text-text-primary">PRD 规范保密体系：</span>
+              密码经本地前端高强度散列，账目均采用客户端私有存储，严守资产隐私底线。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-4 text-center text-xs text-text-muted border-t border-border-subtle bg-surface-card">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between px-6 gap-2">
+      <p>© 2024 财务小管家. 保留所有权利.</p>
+      <div class="flex items-center gap-4 text-[11px]">
+        <a class="hover:text-text-primary transition-colors" href="#">离线运行模式说明</a>
+        <span class="text-border-subtle">•</span>
+        <a class="hover:text-text-primary transition-colors" href="#">安全合规审计</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Storage & Auth Module
+    const Storage = {
+      get(key) {
+        try {
+          const data = localStorage.getItem(key);
+          return data ? JSON.parse(data) : null;
+        } catch (e) { return null; }
+      },
+      set(key, value) {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+          return true;
+        } catch (e) { return false; }
+      }
+    };
+
+    const Auth = {
+      getUsers() { return Storage.get('fm_users') || []; },
+      isUsernameExists(username) {
+        return this.getUsers().some(u => u.username.toLowerCase() === username.toLowerCase());
+      },
+      register(username, password) {
+        if (this.isUsernameExists(username)) {
+          return { success: false, message: '用户名已存在' };
+        }
+        const users = this.getUsers();
+        const newUser = {
+          id: 'user_' + Date.now(),
+          username: username.trim(),
+          password: hashPassword(password),
+          createdAt: new Date().toISOString()
+        };
+        users.push(newUser);
+        Storage.set('fm_users', users);
+        return { success: true, message: '注册成功', user: newUser };
+      }
+    };
+
+    function hashPassword(password) {
+      let hash = 0;
+      for (let i = 0; i < password.length; i++) {
+        const char = password.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return 'hash_' + Math.abs(hash).toString(16);
+    }
+
+    function togglePasswordVisibility(fieldId, iconId) {
+      const field = document.getElementById(fieldId);
+      const icon = document.getElementById(iconId);
+      if (field.type === 'password') {
+        field.type = 'text';
+        icon.textContent = 'visibility';
+      } else {
+        field.type = 'password';
+        icon.textContent = 'visibility_off';
+      }
+    }
+
+    function handleUsernameInput(val) {
+      const statusEl = document.getElementById('usernameStatus');
+      const iconEl = document.getElementById('usernameValidIcon');
+      const inputEl = document.getElementById('username');
+
+      if (val.trim().length === 0) {
+        statusEl.className = 'flex items-center gap-1 text-[11px] font-medium text-text-muted';
+        statusEl.innerHTML = '<span class="material-symbols-outlined text-xs">radio_button_unchecked</span><span>待输入</span>';
+        iconEl.textContent = 'radio_button_unchecked';
+        iconEl.className = 'material-symbols-outlined text-secondary text-base';
+        inputEl.classList.remove('border-error');
+      } else if (val.trim().length >= 3 && /^[a-zA-Z0-9_]+$/.test(val.trim())) {
+        if (Auth.isUsernameExists(val.trim())) {
+          statusEl.className = 'flex items-center gap-1 text-[11px] font-medium text-error';
+          statusEl.innerHTML = '<span class="material-symbols-outlined text-xs">cancel</span><span>用户名已存在</span>';
+          iconEl.textContent = 'close';
+          iconEl.className = 'material-symbols-outlined text-error text-base';
+          inputEl.classList.add('border-error');
+          inputEl.classList.remove('border-secondary');
+        } else {
+          statusEl.className = 'flex items-center gap-1 text-[11px] font-medium text-secondary';
+          statusEl.innerHTML = '<span class="material-symbols-outlined text-xs">check_circle</span><span>用户名可用</span>';
+          iconEl.textContent = 'check';
+          iconEl.className = 'material-symbols-outlined text-secondary text-base';
+          inputEl.classList.remove('border-error', 'border-border-subtle');
+          inputEl.classList.add('border-secondary');
+        }
+      } else {
+        statusEl.className = 'flex items-center gap-1 text-[11px] font-medium text-error';
+        statusEl.innerHTML = '<span class="material-symbols-outlined text-xs">cancel</span><span>需3-20位字母/数字</span>';
+        iconEl.textContent = 'close';
+        iconEl.className = 'material-symbols-outlined text-error text-base';
+        inputEl.classList.add('border-error');
+        inputEl.classList.remove('border-secondary');
+      }
+      validateFormState();
+    }
+
+    function evaluatePasswordStrength(pwd) {
+      const bar1 = document.getElementById('bar1');
+      const bar2 = document.getElementById('bar2');
+      const bar3 = document.getElementById('bar3');
+      const strengthText = document.getElementById('strengthText');
+      const reqLength = document.getElementById('reqLength');
+      const reqLetters = document.getElementById('reqLetters');
+      const reqNumbers = document.getElementById('reqNumbers');
+
+      const hasLength = pwd.length >= 6;
+      const hasLetters = /[a-zA-Z]/.test(pwd);
+      const hasNumbers = /[0-9!@#$%^&*(),.?":{}|<>]/.test(pwd);
+
+      updateReqIndicator(reqLength, hasLength, '至少6个字符');
+      updateReqIndicator(reqLetters, hasLetters, '包含英文字母');
+      updateReqIndicator(reqNumbers, hasNumbers, '包含数字或符号');
+
+      let score = 0;
+      if (hasLength) score++;
+      if (hasLetters) score++;
+      if (hasNumbers && pwd.length >= 8) score++;
+
+      // Reset bars
+      bar1.className = 'h-full rounded-full transition-all duration-300 bg-surface-card-subtle';
+      bar2.className = 'h-full rounded-full transition-all duration-300 bg-surface-card-subtle';
+      bar3.className = 'h-full rounded-full transition-all duration-300 bg-surface-card-subtle';
+
+      if (score === 0) {
+        strengthText.textContent = '待评估';
+        strengthText.className = 'font-bold text-text-muted';
+      } else if (score === 1) {
+        bar1.className = 'h-full rounded-full transition-all duration-300 bg-error';
+        strengthText.textContent = '弱';
+        strengthText.className = 'font-bold text-error';
+      } else if (score === 2) {
+        bar1.className = 'h-full rounded-full transition-all duration-300 bg-cat-dining';
+        bar2.className = 'h-full rounded-full transition-all duration-300 bg-cat-dining';
+        strengthText.textContent = '中';
+        strengthText.className = 'font-bold text-primary';
+      } else {
+        bar1.className = 'h-full rounded-full transition-all duration-300 bg-cat-income';
+        bar2.className = 'h-full rounded-full transition-all duration-300 bg-cat-income';
+        bar3.className = 'h-full rounded-full transition-all duration-300 bg-cat-income';
+        strengthText.textContent = '强';
+        strengthText.className = 'font-bold text-secondary';
+      }
+
+      checkPasswordMatch();
+      validateFormState();
+    }
+
+    function updateReqIndicator(el, isValid, label) {
+      if (isValid) {
+        el.className = 'inline-flex items-center gap-1 text-secondary font-medium';
+        el.innerHTML = `<span class="material-symbols-outlined text-xs">check_circle</span> ${label}`;
+      } else {
+        el.className = 'inline-flex items-center gap-1 text-text-muted font-normal';
+        el.innerHTML = `<span class="material-symbols-outlined text-xs">radio_button_unchecked</span> ${label}`;
+      }
+    }
+
+    function checkPasswordMatch() {
+      const pwd = document.getElementById('password').value;
+      const confirmPwd = document.getElementById('confirmPassword').value;
+      const matchBadge = document.getElementById('matchBadge');
+      const confirmInput = document.getElementById('confirmPassword');
+
+      if (!confirmPwd) {
+        matchBadge.innerHTML = '<span class="material-symbols-outlined text-xs text-text-muted">radio_button_unchecked</span><span class="text-text-muted">待确认</span>';
+        confirmInput.classList.remove('border-secondary', 'border-error');
+        return false;
+      }
+
+      if (pwd === confirmPwd) {
+        matchBadge.className = 'flex items-center gap-1 text-[11px] text-secondary font-medium';
+        matchBadge.innerHTML = '<span class="material-symbols-outlined text-xs">check_circle</span><span>密码一致</span>';
+        confirmInput.classList.remove('border-error');
+        confirmInput.classList.add('border-secondary');
+        return true;
+      } else {
+        matchBadge.className = 'flex items-center gap-1 text-[11px] text-error font-medium';
+        matchBadge.innerHTML = '<span class="material-symbols-outlined text-xs">close</span><span>密码不匹配</span>';
+        confirmInput.classList.remove('border-secondary');
+        confirmInput.classList.add('border-error');
+        return false;
+      }
+    }
+
+    function validateFormState() {
+      const username = document.getElementById('username').value.trim();
+      const pwd = document.getElementById('password').value;
+      const confirmPwd = document.getElementById('confirmPassword').value;
+      const termsAccepted = document.getElementById('termsCheckbox').checked;
+      const submitBtn = document.getElementById('submitBtn');
+
+      const isUsernameValid = username.length >= 3 && /^[a-zA-Z0-9_]+$/.test(username) && !Auth.isUsernameExists(username);
+      const isPwdValid = pwd.length >= 6;
+      const isMatch = pwd === confirmPwd && confirmPwd.length > 0;
+
+      if (isUsernameValid && isPwdValid && isMatch && termsAccepted) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function handleSubmit() {
+      const submitBtn = document.getElementById('submitBtn');
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      submitBtn.innerHTML = `
+        <span class="material-symbols-outlined text-lg animate-spin">refresh</span>
+        <span>正在初始化您的本地加密账簿...</span>
+      `;
+      submitBtn.disabled = true;
+
+      setTimeout(() => {
+        const result = Auth.register(username, password);
+        if (result.success) {
+          submitBtn.innerHTML = `
+            <span class="material-symbols-outlined text-lg">check_circle</span>
+            <span>注册成功，即将前往登录...</span>
+          `;
+          setTimeout(() => {
+            window.location.href = '../index.html#login';
+          }, 1000);
+        } else {
+          alert(result.message);
+          submitBtn.innerHTML = `
+            <span class="material-symbols-outlined text-lg">how_to_reg</span>
+            <span>完成注册并开启记账</span>
+          `;
+          submitBtn.disabled = false;
+        }
+      }, 900);
+    }
+
+    // Hash routing
+    function handleHash() {
+      const hash = window.location.hash.slice(1);
+      if (hash === 'login') {
+        window.location.href = '../index.html#login';
+      }
+    }
+    window.addEventListener('hashchange', handleHash);
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      validateFormState();
+      handleHash();
+    });
+  </script>
+</body>
+</html>

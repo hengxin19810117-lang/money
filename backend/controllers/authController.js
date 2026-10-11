@@ -1,6 +1,5 @@
 const User = require('../models/User');
 const { generateToken, hashPassword, comparePassword } = require('../middleware/auth');
-const LoginLog = require('../models/LoginLog');
 
 class AuthController {
   // 用户注册
@@ -29,21 +28,13 @@ class AuthController {
       }
 
       // 哈希密码
-      const hashedPassword = hashPassword(password);
+      const hashedPassword = await hashPassword(password);
 
       // 创建用户
-      const userId = await User.create({
+      await User.create({
         username,
         password: hashedPassword,
         nickname: nickname || username
-      });
-
-      // 记录登录日志
-      await LoginLog.create({
-        userId: `user_${userId}`,
-        ipAddress: req.ip,
-        userAgent: req.headers['user-agent'],
-        loginStatus: 1
       });
 
       res.json({ success: true, message: '注册成功' });
@@ -66,27 +57,11 @@ class AuthController {
       // 查找用户
       const user = await User.findByUsername(username);
       if (!user) {
-        // 记录失败日志
-        await LoginLog.create({
-          userId: 'unknown',
-          ipAddress: req.ip,
-          userAgent: req.headers['user-agent'],
-          loginStatus: 0,
-          failReason: '用户不存在'
-        });
         return res.status(401).json({ success: false, message: '用户名或密码错误' });
       }
 
       // 验证密码
       if (!comparePassword(password, user.password)) {
-        // 记录失败日志
-        await LoginLog.create({
-          userId: user.id,
-          ipAddress: req.ip,
-          userAgent: req.headers['user-agent'],
-          loginStatus: 0,
-          failReason: '密码错误'
-        });
         return res.status(401).json({ success: false, message: '用户名或密码错误' });
       }
 
@@ -97,14 +72,6 @@ class AuthController {
 
       // 更新最后登录时间
       await User.updateLastLogin(user.id);
-
-      // 记录成功日志
-      await LoginLog.create({
-        userId: user.id,
-        ipAddress: req.ip,
-        userAgent: req.headers['user-agent'],
-        loginStatus: 1
-      });
 
       // 生成Token
       const token = generateToken(user);
@@ -175,7 +142,7 @@ class AuthController {
         return res.status(400).json({ success: false, message: '原密码错误' });
       }
 
-      await User.updatePassword(req.userId, hashPassword(newPassword));
+      await User.updatePassword(req.userId, await hashPassword(newPassword));
 
       res.json({ success: true, message: '密码修改成功' });
     } catch (err) {

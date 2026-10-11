@@ -6,6 +6,7 @@ export default function RegisterPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { register } = useAuth();
@@ -22,6 +23,10 @@ export default function RegisterPage() {
     }
     if (password !== confirmPassword) {
       setError('两次输入的密码不一致');
+      return false;
+    }
+    if (!agreeTerms) {
+      setError('请先阅读并同意《服务条款》');
       return false;
     }
     return true;
@@ -169,6 +174,19 @@ export default function RegisterPage() {
                     required
                   />
                 </div>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id="agreeTerms"
+                  checked={agreeTerms}
+                  onChange={(e) => setAgreeTerms(e.target.checked)}
+                  className="mt-1 w-4 h-4 rounded border-border-subtle text-primary focus:ring-primary"
+                />
+                <label htmlFor="agreeTerms" className="text-xs text-text-secondary cursor-pointer">
+                  我已阅读并完全同意<a href="#" className="text-primary hover:underline" onClick={(e) => { e.preventDefault(); alert('服务条款内容'); }}>《服务条款》</a>
+                </label>
               </div>
 
               {error && (

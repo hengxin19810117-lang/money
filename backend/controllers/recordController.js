@@ -108,16 +108,33 @@ class RecordController {
     }
   }
 
+  // 获取年度统计
+  static async getYearlyStats(req, res) {
+    try {
+      const { year } = req.query;
+
+      if (!year) {
+        return res.status(400).json({ success: false, message: '请指定年份' });
+      }
+
+      const stats = await Record.getYearlyStats(req.userId, parseInt(year));
+      res.json({ success: true, data: stats });
+    } catch (err) {
+      console.error('获取年度统计错误:', err);
+      res.status(500).json({ success: false, message: '服务器错误' });
+    }
+  }
+
   // 获取月度统计
   static async getMonthlyStats(req, res) {
     try {
       const { year, month } = req.query;
 
-      if (!year || !month) {
-        return res.status(400).json({ success: false, message: '请指定年份和月份' });
+      if (!year) {
+        return res.status(400).json({ success: false, message: '请指定年份' });
       }
 
-      const stats = await Record.getMonthlyStats(req.userId, parseInt(year), parseInt(month));
+      const stats = await Record.getMonthlyStats(req.userId, parseInt(year), month ? parseInt(month) : null);
       res.json({ success: true, data: stats });
     } catch (err) {
       console.error('获取月度统计错误:', err);
@@ -128,13 +145,13 @@ class RecordController {
   // 获取日度趋势
   static async getDailyTrend(req, res) {
     try {
-      const { year, month } = req.query;
+      const { year, month, day } = req.query;
 
-      if (!year || !month) {
-        return res.status(400).json({ success: false, message: '请指定年份和月份' });
+      if (!year) {
+        return res.status(400).json({ success: false, message: '请指定年份' });
       }
 
-      const trend = await Record.getDailyTrend(req.userId, parseInt(year), parseInt(month));
+      const trend = await Record.getDailyTrend(req.userId, parseInt(year), month ? parseInt(month) : null, day ? parseInt(day) : null);
       res.json({ success: true, data: trend });
     } catch (err) {
       console.error('获取日度趋势错误:', err);

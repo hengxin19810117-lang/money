@@ -8,18 +8,35 @@ export default function TransactionsPage() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [viewMode, setViewMode] = useState('month');
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [day, setDay] = useState(new Date().getDate());
   const [filters, setFilters] = useState({ type: '', categoryId: '' });
   const { logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     loadRecords();
-  }, [page, filters]);
+  }, [page, year, month, day, viewMode, filters]);
 
   const loadRecords = async () => {
     setLoading(true);
     try {
-      const res = await recordAPI.list({ page, pageSize: 10, ...filters });
+      let startDate, endDate;
+
+      if (viewMode === 'day') {
+        startDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        endDate = startDate;
+      } else if (viewMode === 'month') {
+        startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+        endDate = `${year}-${String(month).padStart(2, '0')}-31`;
+      } else {
+        startDate = `${year}-01-01`;
+        endDate = `${year}-12-31`;
+      }
+
+      const res = await recordAPI.list({ page, pageSize: 10, startDate, endDate, ...filters });
       if (res.success) {
         setRecords(res.data.records);
         setTotalPages(res.data.pagination.totalPages);
@@ -47,6 +64,8 @@ export default function TransactionsPage() {
     logout();
     navigate('/login');
   };
+
+  const years = [2024, 2025, 2026, 2027];
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -96,6 +115,84 @@ export default function TransactionsPage() {
         <div className="p-6 lg:p-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-text-primary">账单明细</h2>
+            <div className="flex items-center gap-3">
+              {/* Combined Time Selector */}
+              <div className="flex items-center gap-2 bg-surface-card-subtle rounded-lg px-3 py-2">
+                <span className="material-symbols-outlined text-text-muted text-lg">calendar_today</span>
+                <select
+                  value={year}
+                  onChange={(e) => setYear(parseInt(e.target.value))}
+                  className="bg-transparent text-text-primary text-sm focus:outline-none cursor-pointer"
+                >
+                  {years.map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+                <span className="text-text-muted">年</span>
+
+                {viewMode !== 'year' && (
+                  <>
+                    <select
+                      value={month}
+                      onChange={(e) => setMonth(parseInt(e.target.value))}
+                      className="bg-transparent text-text-primary text-sm focus:outline-none cursor-pointer"
+                    >
+                      {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
+                        <option key={m} value={m}>{String(m).padStart(2, '0')}</option>
+                      ))}
+                    </select>
+                    <span className="text-text-muted">月</span>
+                  </>
+                )}
+
+                {viewMode === 'day' && (
+                  <>
+                    <select
+                      value={day}
+                      onChange={(e) => setDay(parseInt(e.target.value))}
+                      className="bg-transparent text-text-primary text-sm focus:outline-none cursor-pointer"
+                    >
+                      {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
+                        <option key={d} value={d}>{String(d).padStart(2, '0')}</option>
+                      ))}
+                    </select>
+                    <span className="text-text-muted">日</span>
+                  </>
+                )}
+              </div>
+
+              {/* View Mode Toggle */}
+              <div className="flex bg-surface-card-subtle rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode('year')}
+                  className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${viewMode === 'year' ? 'bg-primary text-white' : 'text-text-secondary hover:text-text-primary'}`}
+                >
+                  年
+                </button>
+                <button
+                  onClick={() => setViewMode('month')}
+                  className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${viewMode === 'month' ? 'bg-primary text-white' : 'text-text-secondary hover:text-text-primary'}`}
+                >
+                  月
+                </button>
+                <button
+                  onClick={() => setViewMode('day')}
+                  className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${viewMode === 'day' ? 'bg-primary text-white' : 'text-text-secondary hover:text-text-primary'}`}
+                >
+                  日
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Date Range Indicator */}
+          <div className="bg-white rounded-xl shadow-sm p-3 mb-6 flex items-center justify-center">
+            <span className="material-symbols-outlined text-primary mr-2">date_range</span>
+            <span className="text-text-secondary text-sm">
+              {viewMode === 'year' && `${year}年 全年账单`}
+              {viewMode === 'month' && `${year}年 ${month}月 账单明细`}
+              {viewMode === 'day' && `${year}年 ${month}月 ${day}日 账单明细`}
+            </span>
           </div>
 
           {/* Filters */}

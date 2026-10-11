@@ -9,6 +9,7 @@ router.use(authMiddleware);
 router.post('/', RecordController.create);
 router.get('/', RecordController.list);
 router.get('/today', RecordController.getToday);
+router.get('/stats/yearly', RecordController.getYearlyStats);
 router.get('/stats/monthly', RecordController.getMonthlyStats);
 router.get('/stats/daily', RecordController.getDailyTrend);
 router.get('/export', RecordController.export);

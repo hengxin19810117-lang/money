@@ -43,6 +43,7 @@ export const recordAPI = {
   update: (id, data) => api.put(`/records/${id}`, data),
   delete: (id) => api.delete(`/records/${id}`),
   getToday: () => api.get('/records/today'),
+  getYearlyStats: (params) => api.get('/records/stats/yearly', { params }),
   getMonthlyStats: (params) => api.get('/records/stats/monthly', { params }),
   getDailyTrend: (params) => api.get('/records/stats/daily', { params }),
   export: (params) => api.get('/records/export', { params }),

@@ -36,9 +36,9 @@ export default function AnalyticsPage() {
         statsRes = await recordAPI.getMonthlyStats({ year, month });
         trendRes = await recordAPI.getDailyTrend({ year, month });
       } else {
-        // 按日查看：获取当日分类统计
-        statsRes = await recordAPI.getMonthlyStats({ year, month, day });
-        trendRes = { success: true, data: [] };
+        // 按日查看：获取当日分类统计和趋势
+        statsRes = await recordAPI.getDailyTrend({ year, month, day });
+        trendRes = await recordAPI.getDailyTrend({ year, month, day });
       }
 
       if (statsRes.success) setStats(statsRes.data);
@@ -55,19 +55,23 @@ export default function AnalyticsPage() {
     navigate('/login');
   };
 
-  // 分离支出和收入
-  const expenseData = stats.filter(s => s.type === 'expense');
-  const incomeData = stats.filter(s => s.type === 'income');
+  // 分离支出和收入（按日查看时stats是趋势数据）
+  const expenseData = viewMode === 'day'
+    ? [{ type: 'expense', total_amount: trend.reduce((sum, t) => sum + parseFloat(t.expense || 0), 0) }]
+    : stats.filter(s => s.type === 'expense');
+  const incomeData = viewMode === 'day'
+    ? [{ type: 'income', total_amount: trend.reduce((sum, t) => sum + parseFloat(t.income || 0), 0) }]
+    : stats.filter(s => s.type === 'income');
 
   // 计算总计
   const totalExpense = expenseData.reduce((sum, s) => sum + parseFloat(s.total_amount || 0), 0);
   const totalIncome = incomeData.reduce((sum, s) => sum + parseFloat(s.total_amount || 0), 0);
 
   // 饼图数据
-  const pieData = expenseData.slice(0, 5).map(s => ({
-    name: s.category_name || s.month + '月',
-    value: parseFloat(s.total_amount || 0),
-    color: s.category_color || '#d0d8e4'
+  const pieData = (viewMode === 'day' ? stats : expenseData).slice(0, 5).map(s => ({
+    name: s.category_name || (s.record_date ? s.record_date.slice(-2) + '日' : '支出'),
+    value: parseFloat(s.total_amount || s.expense || 0),
+    color: s.category_color || '#f8a5ab'
   }));
 
   const COLORS = ['#f8a5ab', '#ffc2d5', '#ffb3d1', '#d4bfff', '#a8d8ff', '#98ddca', '#ffd93d', '#6bcb77'];
@@ -80,11 +84,13 @@ export default function AnalyticsPage() {
         const inc = stats.filter(s => s.type === 'income' && s.month === m).reduce((sum, s) => sum + parseFloat(s.total_amount || 0), 0);
         return { name: `${m}月`, expense: exp, income: inc };
       })
-    : trend.map(t => ({
-        name: viewMode === 'month' ? t.record_date?.slice(-2) + '日' : t.record_date,
-        expense: parseFloat(t.expense || 0),
-        income: parseFloat(t.income || 0)
-      }));
+    : viewMode === 'day'
+      ? [{ name: `${day}日`, expense: trend.reduce((sum, t) => sum + parseFloat(t.expense || 0), 0), income: trend.reduce((sum, t) => sum + parseFloat(t.income || 0), 0) }]
+      : trend.map(t => ({
+          name: t.record_date?.slice(-2) + '日',
+          expense: parseFloat(t.expense || 0),
+          income: parseFloat(t.income || 0)
+        }));
 
   const years = [2024, 2025, 2026, 2027];
 
@@ -173,7 +179,7 @@ export default function AnalyticsPage() {
                       onChange={(e) => setDay(parseInt(e.target.value))}
                       className="bg-transparent text-text-primary text-sm focus:outline-none cursor-pointer"
                     >
-                      {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
+                      {Array.from({ length: getDaysInMonth(year, month) }, (_, i) => i + 1).map(d => (
                         <option key={d} value={d}>{String(d).padStart(2, '0')}</option>
                       ))}
                     </select>
@@ -248,9 +254,29 @@ export default function AnalyticsPage() {
             {/* Pie Chart */}
             <div className="bg-white rounded-2xl shadow-sm p-6">
               <h3 className="text-lg font-bold text-text-primary mb-4">
-                {viewMode === 'year' ? '年度支出分类' : viewMode === 'month' ? '支出分类占比' : '今日支出分类'}
+                {viewMode === 'year' ? '年度支出分类' : viewMode === 'month' ? '支出分类占比' : '收支概览'}
               </h3>
-              {pieData.length > 0 ? (
+              {viewMode === 'day' ? (
+                // 按日查看：显示收支概览
+                <div className="h-64 flex flex-col items-center justify-center">
+                  <div className="text-center">
+                    <p className="text-text-muted text-sm">今日结余</p>
+                    <p className={`text-4xl font-bold mt-2 ${totalIncome - totalExpense >= 0 ? 'text-secondary' : 'text-error'}`}>
+                      ¥{(totalIncome - totalExpense).toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex gap-8 mt-6">
+                    <div className="text-center">
+                      <p className="text-xs text-text-muted">支出</p>
+                      <p className="text-xl font-bold text-error">¥{totalExpense.toFixed(2)}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-text-muted">收入</p>
+                      <p className="text-xl font-bold text-secondary">¥{totalIncome.toFixed(2)}</p>
+                    </div>
+                  </div>
+                </div>
+              ) : pieData.length > 0 ? (
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -277,52 +303,76 @@ export default function AnalyticsPage() {
                   <p className="mt-2">暂无数据</p>
                 </div>
               )}
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                {pieData.map((item, index) => (
-                  <div key={item.name} className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-                    <span className="text-xs text-text-secondary">{item.name}</span>
-                  </div>
-                ))}
-              </div>
+              {viewMode !== 'day' && pieData.length > 0 && (
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  {pieData.map((item, index) => (
+                    <div key={item.name} className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+                      <span className="text-xs text-text-secondary">{item.name}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Top Ranking */}
             <div className="bg-white rounded-2xl shadow-sm p-6">
               <h3 className="text-lg font-bold text-text-primary mb-4">
-                {viewMode === 'year' ? '年度支出 Top 5' : viewMode === 'month' ? '支出 Top 3' : '支出分类'}
+                {viewMode === 'year' ? '年度支出 Top 5' : viewMode === 'month' ? '支出 Top 3' : '今日支出构成'}
               </h3>
-              <div className="space-y-4">
-                {expenseData.slice(0, viewMode === 'year' ? 5 : 3).map((item, index) => (
-                  <div key={item.category_id || index} className="flex items-center gap-4">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : index === 2 ? 'bg-amber-600' : 'bg-gray-300'}`}>
-                      {index + 1}
+              {viewMode === 'day' ? (
+                // 按日查看：显示支出金额
+                <div className="text-center py-8">
+                  <p className="text-4xl font-bold text-error">¥{totalExpense.toFixed(2)}</p>
+                  <p className="text-text-muted text-sm mt-2">今日支出总额</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {expenseData.slice(0, viewMode === 'year' ? 5 : 3).map((item, index) => (
+                    <div key={item.category_id || index} className="flex items-center gap-4">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : index === 2 ? 'bg-amber-600' : 'bg-gray-300'}`}>
+                        {index + 1}
+                      </div>
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: (item.category_color || '#d0d8e4') + '20' }}>
+                        <span className="material-symbols-outlined" style={{ color: item.category_color }}>{item.category_icon || 'receipt'}</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-text-primary">{item.category_name || `${item.month}月`}</p>
+                        <p className="text-xs text-text-muted">{item.record_count || 0}笔</p>
+                      </div>
+                      <p className="text-lg font-bold text-error">¥{parseFloat(item.total_amount || 0).toFixed(2)}</p>
                     </div>
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: (item.category_color || '#d0d8e4') + '20' }}>
-                      <span className="material-symbols-outlined" style={{ color: item.category_color }}>{item.category_icon || 'receipt'}</span>
+                  ))}
+                  {expenseData.length === 0 && (
+                    <div className="text-center py-8 text-text-muted">
+                      <span className="material-symbols-outlined text-4xl">trending_up</span>
+                      <p className="mt-2">暂无数据</p>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-text-primary">{item.category_name || `${item.month}月`}</p>
-                      <p className="text-xs text-text-muted">{item.record_count || 0}笔</p>
-                    </div>
-                    <p className="text-lg font-bold text-error">¥{parseFloat(item.total_amount || 0).toFixed(2)}</p>
-                  </div>
-                ))}
-                {expenseData.length === 0 && (
-                  <div className="text-center py-8 text-text-muted">
-                    <span className="material-symbols-outlined text-4xl">trending_up</span>
-                    <p className="mt-2">暂无数据</p>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Trend Chart */}
             <div className="bg-white rounded-2xl shadow-sm p-6 lg:col-span-2">
               <h3 className="text-lg font-bold text-text-primary mb-4">
-                {viewMode === 'year' ? '月度趋势' : viewMode === 'month' ? '日度趋势' : '趋势'}
+                {viewMode === 'year' ? '月度趋势' : viewMode === 'month' ? '日度趋势' : '收支对比'}
               </h3>
-              {trendData.length > 0 ? (
+              {viewMode === 'day' ? (
+                // 按日查看：显示收支对比卡片
+                <div className="grid grid-cols-2 gap-4 h-64">
+                  <div className="bg-red-50 rounded-xl p-6 flex flex-col items-center justify-center">
+                    <span className="material-symbols-outlined text-error text-4xl">trending_down</span>
+                    <p className="text-text-muted text-sm mt-2">支出</p>
+                    <p className="text-3xl font-bold text-error mt-2">¥{trend.reduce((sum, t) => sum + parseFloat(t.expense || 0), 0).toFixed(2)}</p>
+                  </div>
+                  <div className="bg-green-50 rounded-xl p-6 flex flex-col items-center justify-center">
+                    <span className="material-symbols-outlined text-secondary text-4xl">trending_up</span>
+                    <p className="text-text-muted text-sm mt-2">收入</p>
+                    <p className="text-3xl font-bold text-secondary mt-2">¥{trend.reduce((sum, t) => sum + parseFloat(t.income || 0), 0).toFixed(2)}</p>
+                  </div>
+                </div>
+              ) : trendData.length > 0 ? (
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={trendData}>

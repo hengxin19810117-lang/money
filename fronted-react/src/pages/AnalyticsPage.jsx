@@ -219,13 +219,6 @@ export default function AnalyticsPage() {
           <div className="flex items-center justify-end -mt-4 mb-4">
             {/* Placeholder to balance the layout */}
           </div>
-                  {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
-                    <option key={d} value={d}>{d}日</option>
-                  ))}
-                </select>
-              )}
-            </div>
-          </div>
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">

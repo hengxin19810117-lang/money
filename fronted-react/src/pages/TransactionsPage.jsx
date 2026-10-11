@@ -37,9 +37,9 @@ export default function TransactionsPage() {
       }
 
       const res = await recordAPI.list({ page, pageSize: 10, startDate, endDate, ...filters });
-      if (res.success) {
-        setRecords(res.data.records);
-        setTotalPages(res.data.pagination.totalPages);
+      if (res.success && res.data) {
+        setRecords(res.data.content || []);
+        setTotalPages(res.data.totalPages || 1);
       }
     } catch (err) {
       console.error('获取记录失败', err);

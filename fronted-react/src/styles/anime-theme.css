@@ -1,0 +1,529 @@
+/* 二次元动漫风格主题 - Anime Theme */
+
+:root {
+  /* 主色调 - 樱花粉+天空蓝 */
+  --anime-primary: #ff9a9e;
+  --anime-secondary: #a18cd1;
+  --anime-accent: #00d4ff;
+  --anime-glow: #ff6b9d;
+
+  /* 渐变色 */
+  --anime-gradient-1: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  --anime-gradient-2: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+  --anime-gradient-3: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+  --anime-gradient-4: linear-gradient(135deg, #00d4ff 0%, #1a2a6c 100%);
+  --anime-gradient-card: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,245,247,0.95) 100%);
+
+  /* 背景 */
+  --anime-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  --anime-bg-card: rgba(255, 255, 255, 0.08);
+  --anime-bg-glass: rgba(255, 255, 255, 0.1);
+
+  /* 文字 */
+  --anime-text: #2d3436;
+  --anime-text-light: #ffffff;
+  --anime-text-muted: #a0a0a0;
+
+  /* 装饰 */
+  --anime-border: rgba(255, 255, 255, 0.2);
+  --anime-shadow: 0 8px 32px rgba(255, 107, 157, 0.3);
+  --anime-glow-effect: 0 0 20px rgba(255, 107, 157, 0.5);
+}
+
+/* 全局样式 */
+.anime-body {
+  font-family: 'Nunito', 'Comic Sans MS', cursive, sans-serif;
+  background: var(--anime-bg);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 星星背景动画 */
+.anime-body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+    radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 230px 80px, #fff, transparent),
+    radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 370px 60px, #fff, transparent),
+    radial-gradient(2px 2px at 450px 180px, rgba(255,255,255,0.5), transparent);
+  background-repeat: repeat;
+  background-size: 500px 200px;
+  animation: sparkle 4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes sparkle {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+/* 浮动装饰 */
+.anime-body::after {
+  content: '✨';
+  position: fixed;
+  top: 20%;
+  right: 10%;
+  font-size: 3rem;
+  animation: float 3s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+/* 侧边栏样式 */
+.anime-sidebar {
+  background: linear-gradient(180deg, rgba(30, 30, 50, 0.95) 0%, rgba(20, 20, 40, 0.98) 100%);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid var(--anime-border);
+  position: relative;
+  z-index: 10;
+}
+
+.anime-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, var(--anime-glow), transparent);
+  opacity: 0.5;
+}
+
+.anime-logo {
+  background: var(--anime-gradient-2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(161, 140, 209, 0.5);
+}
+
+/* 导航链接 */
+.anime-nav-link {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.anime-nav-link::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--anime-gradient-3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s ease;
+  opacity: 0.3;
+}
+
+.anime-nav-link:hover::before {
+  width: 200%;
+  height: 200%;
+}
+
+.anime-nav-link:hover {
+  border-color: var(--anime-glow);
+  box-shadow: var(--anime-glow-effect);
+  transform: translateX(5px);
+}
+
+.anime-nav-link.active {
+  background: var(--anime-gradient-3);
+  border-color: var(--anime-primary);
+  box-shadow: var(--anime-glow-effect);
+}
+
+/* 按钮样式 */
+.anime-btn {
+  background: var(--anime-gradient-2);
+  border: none;
+  border-radius: 20px;
+  padding: 12px 24px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(161, 140, 209, 0.4);
+}
+
+.anime-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+}
+
+.anime-btn:hover::before {
+  left: 100%;
+}
+
+.anime-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(161, 140, 209, 0.6);
+}
+
+.anime-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.anime-btn-primary {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ff9a9e 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 卡片样式 */
+.anime-card {
+  background: var(--anime-gradient-card);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.anime-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--anime-primary), var(--anime-secondary), var(--anime-accent));
+}
+
+.anime-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 20px 40px rgba(255, 107, 157, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* 输入框样式 */
+.anime-input {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 12px 16px;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.anime-input:focus {
+  border-color: var(--anime-primary);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.05),
+    0 0 0 4px rgba(255, 154, 158, 0.2);
+  outline: none;
+}
+
+/* 标签/徽章 */
+.anime-badge {
+  background: var(--anime-gradient-2);
+  border-radius: 12px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 图表容器 */
+.anime-chart-container {
+  background: var(--anime-gradient-card);
+  border-radius: 24px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--anime-shadow);
+}
+
+/* 统计数字 */
+.anime-stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--anime-primary), var(--anime-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 154, 158, 0.3);
+}
+
+/* 分类图标容器 */
+.anime-category-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: var(--anime-gradient-3);
+  box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+  transition: all 0.3s ease;
+}
+
+.anime-category-icon:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* 进度条 */
+.anime-progress {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.anime-progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--anime-gradient-2);
+  transition: width 0.5s ease;
+}
+
+/* 模态框/抽屉 */
+.anime-modal {
+  background: rgba(20, 20, 40, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid var(--anime-border);
+  box-shadow: var(--anime-shadow);
+}
+
+/* 复选框美化 */
+.anime-checkbox {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  border: 2px solid var(--anime-secondary);
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.anime-checkbox:checked {
+  background: var(--anime-gradient-2);
+  border-color: var(--anime-primary);
+}
+
+.anime-checkbox:checked::after {
+  content: '✓';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* 下拉选择器 */
+.anime-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--anime-border);
+  border-radius: 12px;
+  padding: 8px 16px;
+  color: var(--anime-text-light);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 40px;
+}
+
+.anime-select:focus {
+  border-color: var(--anime-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+}
+
+/* 加载动画 */
+.anime-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.anime-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--anime-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 页面标题 */
+.anime-title {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, #ffecd2 50%, #fcb69f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 空状态 */
+.anime-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--anime-text-muted);
+}
+
+.anime-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+  animation: bounce 2s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* 切换视图按钮组 */
+.anime-toggle-group {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.anime-toggle-btn {
+  padding: 8px 20px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: var(--anime-text-muted);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.anime-toggle-btn:hover {
+  color: white;
+}
+
+.anime-toggle-btn.active {
+  background: var(--anime-gradient-2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(161, 140, 209, 0.4);
+}
+
+/* 列表项 */
+.anime-list-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.anime-list-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--anime-border);
+  transform: translateX(5px);
+}
+
+/* 金额显示 */
+.anime-amount-expense {
+  color: #ff6b6b;
+  font-weight: 700;
+}
+
+.anime-amount-income {
+  color: #51cf66;
+  font-weight: 700;
+}
+
+/* 头像 */
+.anime-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  background: linear-gradient(var(--anime-bg), var(--anime-bg)) padding-box,
+              linear-gradient(135deg, var(--anime-primary), var(--anime-accent)) border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+/* 弹窗提示 */
+.anime-toast {
+  background: linear-gradient(135deg, rgba(30, 30, 50, 0.95), rgba(20, 20, 40, 0.98));
+  border: 1px solid var(--anime-border);
+  border-radius: 16px;
+  padding: 16px 24px;
+  box-shadow: var(--anime-shadow);
+  backdrop-filter: blur(10px);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .anime-sidebar {
+    background: rgba(20, 20, 40, 0.98);
+  }
+
+  .anime-card {
+    border-radius: 20px;
+  }
+
+  .anime-stat-number {
+    font-size: 1.8rem;
+  }
+}

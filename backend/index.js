@@ -7,6 +7,7 @@ const recordRoutes = require('./routes/records');
 const categoryRoutes = require('./routes/categories');
 const budgetRoutes = require('./routes/budgets');
 const channelRoutes = require('./routes/channels');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +29,7 @@ app.use('/api/records', recordRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/budgets', budgetRoutes);
 app.use('/api/channels', channelRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 健康检查
 app.get('/api/health', (req, res) => {

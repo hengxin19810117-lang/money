@@ -1,0 +1,57 @@
+[
+  {
+    "id": "rec_test_001",
+    "user_id": "test_user_001",
+    "type": "expense",
+    "amount": 35.50,
+    "category_id": "cat_exp_餐饮",
+    "note": "午餐",
+    "merchant": "麦当劳",
+    "payment_channel": "支付宝",
+    "record_date": "2024-01-15"
+  },
+  {
+    "id": "rec_test_002",
+    "user_id": "test_user_001",
+    "type": "expense",
+    "amount": 15.00,
+    "category_id": "cat_exp_交通",
+    "note": "地铁",
+    "merchant": "",
+    "payment_channel": "微信",
+    "record_date": "2024-01-15"
+  },
+  {
+    "id": "rec_test_003",
+    "user_id": "test_user_001",
+    "type": "income",
+    "amount": 5000.00,
+    "category_id": "cat_inc_工资",
+    "note": "月薪",
+    "merchant": "",
+    "payment_channel": "银行卡",
+    "record_date": "2024-01-01"
+  },
+  {
+    "id": "rec_test_004",
+    "user_id": "test_user_002",
+    "type": "expense",
+    "amount": 299.00,
+    "category_id": "cat_exp_购物",
+    "note": "衣服",
+    "merchant": "淘宝",
+    "payment_channel": "支付宝",
+    "record_date": "2024-01-10"
+  },
+  {
+    "id": "rec_test_005",
+    "user_id": "test_user_002",
+    "type": "income",
+    "amount": 500.00,
+    "category_id": "cat_inc_奖金",
+    "note": "年终奖",
+    "merchant": "",
+    "payment_channel": "银行卡",
+    "record_date": "2024-01-20"
+  }
+]

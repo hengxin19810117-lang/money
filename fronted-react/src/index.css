@@ -1,40 +1,85 @@
 @import "tailwindcss";
 
+/* 二次元动漫风格主题 */
 @theme {
-  --color-primary: #a05a63;
-  --color-primary-container: #ffd4d8;
+  /* 主色调 - 樱花粉+糖果色 */
+  --color-primary: #ff9a9e;
+  --color-primary-container: #fff0f3;
   --color-on-primary-container: #5c2a30;
-  --color-secondary: #2d8b74;
-  --color-secondary-container: #b8f0e0;
-  --color-on-secondary-container: #1a5c47;
-  --color-cat-dining: #f8a5ab;
+  --color-secondary: #a18cd1;
+  --color-secondary-container: #f0e6ff;
+  --color-on-secondary-container: #3d2a5c;
+
+  /* 分类颜色 - 动漫风格 */
+  --color-cat-dining: #ff9a9e;
   --color-cat-transit: #ffc2d5;
   --color-cat-shopping: #ffb3d1;
   --color-cat-entertainment: #d4bfff;
-  --color-cat-health: #ff9a9a;
+  --color-cat-health: #ffb3b3;
   --color-cat-education: #a8d8ff;
-  --color-cat-housing: #a8d8b9;
-  --color-cat-income: #6fcfb8;
-  --color-surface-card: #FFFFFF;
-  --color-surface-card-subtle: #f0f3f8;
-  --color-surface-container-low: #eef2fa;
-  --color-surface-container-high: #ced9ec;
-  --color-surface-canvas: #f0f4f9;
-  --color-text-primary: #1a2332;
-  --color-text-secondary: #5a6577;
-  --color-text-muted: #8896a8;
-  --color-border-subtle: #d0d8e4;
-  --color-border-focus: #f8a5ab;
-  --color-error: #dc2626;
+  --color-cat-housing: #b8f0e0;
+  --color-cat-income: #98ddca;
 
-  --font-sans: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+  /* 表面颜色 - 深色背景 */
+  --color-surface-card: rgba(255, 255, 255, 0.08);
+  --color-surface-card-subtle: rgba(255, 255, 255, 0.05);
+  --color-surface-container-low: rgba(255, 255, 255, 0.1);
+  --color-surface-container-high: rgba(255, 255, 255, 0.15);
+  --color-surface-canvas: #1a1a2e;
+
+  /* 文字颜色 */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e0e0e0;
+  --color-text-muted: #a0a0a0;
+
+  /* 边框 */
+  --color-border-subtle: rgba(255, 255, 255, 0.15);
+  --color-border-focus: #ff9a9e;
+
+  /* 错误色 */
+  --color-error: #ff6b6b;
+
+  /* 字体 */
+  --font-sans: 'Nunito', 'Comic Sans MS', 'Noto Sans SC', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
+/* 全局样式 */
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-surface-canvas);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   color: var(--color-text-primary);
+  min-height: 100vh;
+}
+
+/* 星星背景动画 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.9), transparent),
+    radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 230px 80px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 370px 60px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 450px 180px, rgba(255,255,255,0.4), transparent);
+  background-repeat: repeat;
+  background-size: 500px 200px;
+  animation: sparkle 4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes sparkle {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
 }
 
 .material-symbols-outlined {
@@ -51,4 +96,141 @@ body {
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+}
+
+/* 卡片样式 */
+.bg-surface-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 按钮渐变 */
+.bg-gradient-to-r {
+  background-image: linear-gradient(to right, var(--color-primary), var(--color-secondary)) !important;
+}
+
+/* 导航激活状态 */
+.nav-link.active {
+  background: linear-gradient(135deg, rgba(255,154,158,0.3) 0%, rgba(161,140,209,0.3) 100%);
+  border: 1px solid rgba(255, 154, 158, 0.5);
+  box-shadow: 0 0 20px rgba(255, 154, 158, 0.3);
+}
+
+/* 悬浮效果 */
+.transition-all:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 154, 158, 0.3);
+}
+
+/* 输入框样式 */
+input, select {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+}
+
+input:focus, select:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(255, 154, 158, 0.2) !important;
+  outline: none !important;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 下拉选项 */
+select option {
+  background: #1a1a2e;
+  color: white;
+}
+
+/* 圆角增强 */
+.rounded-xl {
+  border-radius: 1rem !important;
+}
+
+.rounded-2xl {
+  border-radius: 1.5rem !important;
+}
+
+/* 阴影效果 */
+.shadow-lg {
+  box-shadow: 0 10px 40px rgba(255, 107, 157, 0.2) !important;
+}
+
+/* 金额颜色 */
+.text-error {
+  color: #ff6b6b !important;
+}
+
+.text-secondary {
+  color: #98ddca !important;
+}
+
+/* 渐变文字效果 */
+.text-gradient {
+  background: linear-gradient(135deg, #ff9a9e, #a18cd1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 按钮样式 */
+button {
+  transition: all 0.3s ease;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* 列表项悬浮 */
+.divide-y > div {
+  transition: all 0.3s ease;
+}
+
+.divide-y > div:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 154, 158, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 154, 158, 0.7);
+}
+
+/* 浮动装饰动画 */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
+}
+
+.floating-decoration {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* 发光效果 */
+.glow-effect {
+  box-shadow: 0 0 20px rgba(255, 154, 158, 0.5);
+}
+
+/* 玻璃态效果 */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }

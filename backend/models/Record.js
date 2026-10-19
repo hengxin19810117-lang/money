@@ -80,10 +80,44 @@ class Record {
 
   // 更新记账记录
   static async update(id, userId, { amount, categoryId, note, merchant, paymentChannel, recordDate }) {
+    // 构建动态更新语句
+    const updates = [];
+    const params = [];
+
+    if (amount !== undefined) {
+      updates.push('amount = ?');
+      params.push(amount);
+    }
+    if (categoryId !== undefined) {
+      updates.push('category_id = ?');
+      params.push(categoryId);
+    }
+    if (note !== undefined) {
+      updates.push('note = ?');
+      params.push(note);
+    }
+    if (merchant !== undefined) {
+      updates.push('merchant = ?');
+      params.push(merchant);
+    }
+    if (paymentChannel !== undefined) {
+      updates.push('payment_channel = ?');
+      params.push(paymentChannel);
+    }
+    if (recordDate !== undefined) {
+      updates.push('record_date = ?');
+      params.push(recordDate);
+    }
+
+    if (updates.length === 0) {
+      return false;
+    }
+
+    params.push(id, userId);
+
     const [result] = await pool.query(
-      `UPDATE records SET amount = ?, category_id = ?, note = ?, merchant = ?, payment_channel = ?, record_date = ?
-       WHERE id = ? AND user_id = ?`,
-      [amount, categoryId, note, merchant, paymentChannel, recordDate, id, userId]
+      `UPDATE records SET ${updates.join(', ')} WHERE id = ? AND user_id = ?`,
+      params
     );
     return result.affectedRows > 0;
   }

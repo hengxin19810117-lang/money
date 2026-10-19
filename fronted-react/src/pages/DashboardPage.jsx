@@ -4,19 +4,19 @@ import { useAuth } from '../context/AuthContext';
 import { recordAPI, categoryAPI } from '../api/auth';
 
 const EXPENSE_CATEGORIES = [
-  { id: 'cat_dining', name: '餐饮', icon: 'restaurant', color: '#f8a5ab' },
+  { id: 'cat_dining', name: '餐饮', icon: 'restaurant', color: '#ff9a9e' },
   { id: 'cat_transit', name: '交通', icon: 'commute', color: '#ffc2d5' },
   { id: 'cat_shopping', name: '购物', icon: 'shopping_bag', color: '#ffb3d1' },
   { id: 'cat_entertainment', name: '娱乐', icon: 'sports_esports', color: '#d4bfff' },
-  { id: 'cat_health', name: '医疗', icon: 'medical_services', color: '#ff9a9a' },
+  { id: 'cat_health', name: '医疗', icon: 'medical_services', color: '#ffb3b3' },
   { id: 'cat_education', name: '教育', icon: 'school', color: '#a8d8ff' },
-  { id: 'cat_housing', name: '居住', icon: 'home', color: '#a8d8b9' },
+  { id: 'cat_housing', name: '居住', icon: 'home', color: '#b8f0e0' },
   { id: 'cat_other', name: '其他', icon: 'more_horiz', color: '#d0d8e4' },
 ];
 
 const INCOME_CATEGORIES = [
-  { id: 'cat_salary', name: '工资', icon: 'payments', color: '#6fcfb8' },
-  { id: 'cat_bonus', name: '奖金', icon: 'card_giftcard', color: '#98ddca' },
+  { id: 'cat_salary', name: '工资', icon: 'payments', color: '#98ddca' },
+  { id: 'cat_bonus', name: '奖金', icon: 'card_giftcard', color: '#a8f0e0' },
   { id: 'cat_investment', name: '投资', icon: 'trending_up', color: '#b8f0e0' },
   { id: 'cat_gift', name: '礼金', icon: 'volunteer_activism', color: '#d4f4e8' },
   { id: 'cat_other_income', name: '其他', icon: 'more_horiz', color: '#e0e8f0' },
@@ -106,40 +106,43 @@ export default function DashboardPage() {
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 flex-shrink-0 flex flex-col border-r border-border-subtle bg-white">
-        <div className="p-5 border-b border-border-subtle">
+      <aside className="w-64 flex-shrink-0 flex flex-col border-r glass-effect" style={{ background: 'rgba(30, 30, 50, 0.8)' }}>
+        {/* Floating decoration */}
+        <div className="absolute -top-4 -right-4 text-4xl floating-decoration" style={{ animationDelay: '0s' }}>🌸</div>
+
+        <div className="p-5 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-md">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-400 via-purple-400 to-blue-400 flex items-center justify-center shadow-lg" style={{ boxShadow: '0 4px 20px rgba(255, 154, 158, 0.5)' }}>
               <span className="material-symbols-outlined text-white text-xl">account_balance_wallet</span>
             </div>
             <div>
-              <h1 className="font-bold text-text-primary text-lg leading-tight">财务小管家</h1>
-              <p className="text-xs text-text-muted">轻量高效记账</p>
+              <h1 className="font-bold text-lg leading-tight text-gradient">财务小管家</h1>
+              <p className="text-xs text-white/60">✨ 轻量高效记账</p>
             </div>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
-          <a className="nav-link active flex items-center gap-3 px-4 py-3 rounded-xl transition-all bg-surface-container-low text-primary" href="/dashboard">
+        <nav className="flex-1 p-4 space-y-2">
+          <a className="nav-link active flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" href="/dashboard">
             <span className="material-symbols-outlined">dashboard</span>
             <span className="font-medium">首页</span>
           </a>
-          <a className="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface-container-low transition-all" href="/transactions">
+          <a className="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl text-white/70 hover:text-white hover:bg-white/10 transition-all" href="/transactions">
             <span className="material-symbols-outlined">receipt_long</span>
             <span className="font-medium">账单明细</span>
           </a>
-          <a className="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface-container-low transition-all" href="/analytics">
+          <a className="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl text-white/70 hover:text-white hover:bg-white/10 transition-all" href="/analytics">
             <span className="material-symbols-outlined">pie_chart</span>
             <span className="font-medium">统计报表</span>
           </a>
-          <a className="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface-container-low transition-all" href="/settings">
+          <a className="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl text-white/70 hover:text-white hover:bg-white/10 transition-all" href="/settings">
             <span className="material-symbols-outlined">settings</span>
             <span className="font-medium">个人设置</span>
           </a>
         </nav>
 
-        <div className="p-4 border-t border-border-subtle">
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-red-50 hover:text-error transition-all">
+        <div className="p-4 border-t border-white/10">
+          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-white/70 hover:text-pink-400 hover:bg-pink-400/10 transition-all">
             <span className="material-symbols-outlined">logout</span>
             <span className="font-medium">退出登录</span>
           </button>
@@ -147,60 +150,69 @@ export default function DashboardPage() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        <div className="p-6 lg:p-8">
+      <main className="flex-1 overflow-auto relative">
+        {/* Floating decorations */}
+        <span className="fixed top-20 right-20 text-3xl floating-decoration opacity-50" style={{ animationDelay: '0.5s' }}>⭐</span>
+        <span className="fixed top-40 left-10 text-2xl floating-decoration opacity-30" style={{ animationDelay: '1s' }}>💫</span>
+
+        <div className="p-6 lg:p-8 relative z-10">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-text-primary">你好，{user?.nickname || user?.username}</h2>
-              <p className="text-text-secondary mt-1">{new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</p>
+              <h2 className="text-2xl font-bold text-white">你好，<span className="text-gradient">{user?.nickname || user?.username}</span> 🌟</h2>
+              <p className="text-white/60 mt-1">{new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</p>
             </div>
             <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-xs text-text-muted">今日支出</p>
-                <p className="text-lg font-bold text-error">¥{todayExpense.toFixed(2)}</p>
+              <div className="glass-effect rounded-2xl px-5 py-3 text-center">
+                <p className="text-xs text-white/60">今日支出</p>
+                <p className="text-xl font-bold text-pink-400">¥{todayExpense.toFixed(2)}</p>
               </div>
-              <div className="text-right">
-                <p className="text-xs text-text-muted">今日收入</p>
-                <p className="text-lg font-bold text-secondary">¥{todayIncome.toFixed(2)}</p>
+              <div className="glass-effect rounded-2xl px-5 py-3 text-center">
+                <p className="text-xs text-white/60">今日收入</p>
+                <p className="text-xl font-bold text-emerald-400">¥{todayIncome.toFixed(2)}</p>
               </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Record Form */}
-            <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6">
-              <h3 className="text-lg font-bold text-text-primary mb-4">记一笔</h3>
+            <div className="lg:col-span-2 glass-effect rounded-3xl p-6" style={{ background: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">📝</span>
+                <h3 className="text-lg font-bold text-white">记一笔</h3>
+              </div>
 
               {/* Type Toggle */}
               <div className="flex gap-2 mb-6">
                 <button
                   onClick={() => { setType('expense'); setCategory(null); }}
-                  className={`flex-1 py-2.5 rounded-xl font-medium transition-all ${type === 'expense' ? 'bg-error text-white' : 'bg-surface-card-subtle text-text-secondary'}`}
+                  className={`flex-1 py-3 rounded-2xl font-semibold transition-all ${type === 'expense' ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                  style={{ boxShadow: type === 'expense' ? '0 4px 20px rgba(255, 107, 107, 0.4)' : 'none' }}
                 >
-                  支出
+                  💸 支出
                 </button>
                 <button
                   onClick={() => { setType('income'); setCategory(null); }}
-                  className={`flex-1 py-2.5 rounded-xl font-medium transition-all ${type === 'income' ? 'bg-secondary text-white' : 'bg-surface-card-subtle text-text-secondary'}`}
+                  className={`flex-1 py-3 rounded-2xl font-semibold transition-all ${type === 'income' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                  style={{ boxShadow: type === 'income' ? '0 4px 20px rgba(16, 185, 129, 0.4)' : 'none' }}
                 >
-                  收入
+                  💰 收入
                 </button>
               </div>
 
               <form onSubmit={handleSubmit}>
                 {/* Amount */}
                 <div className="mb-4">
-                  <label className="text-xs font-semibold text-text-primary block mb-2">金额</label>
+                  <label className="text-xs font-semibold text-white/70 block mb-2">💴 金额</label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-text-muted">¥</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-3xl text-pink-400">¥</span>
                     <input
                       type="number"
                       step="0.01"
                       placeholder="0.00"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      className="w-full h-14 pl-10 pr-4 text-2xl font-bold bg-surface-card-subtle rounded-xl focus:outline-none focus:ring-2 focus:ring-border-focus"
+                      className="w-full h-16 pl-12 pr-4 text-3xl font-bold bg-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 text-white placeholder-white/30"
                       required
                     />
                   </div>
@@ -208,22 +220,21 @@ export default function DashboardPage() {
 
                 {/* Categories */}
                 <div className="mb-4">
-                  <label className="text-xs font-semibold text-text-primary block mb-2">分类</label>
-                  <div className="grid grid-cols-4 gap-2">
+                  <label className="text-xs font-semibold text-white/70 block mb-2">🏷️ 分类</label>
+                  <div className="grid grid-cols-4 gap-3">
                     {currentCategories.map((cat) => (
                       <button
                         key={cat.id}
                         type="button"
                         onClick={() => setCategory(cat.id)}
-                        className={`p-3 rounded-xl flex flex-col items-center gap-1 transition-all ${category === cat.id ? 'ring-2 ring-offset-2' : ''}`}
+                        className={`p-4 rounded-2xl flex flex-col items-center gap-2 transition-all ${category === cat.id ? 'ring-2 ring-white scale-105' : 'hover:scale-105'}`}
                         style={{
-                          backgroundColor: cat.color + '20',
-                          color: type === 'expense' ? '#a05a63' : '#2d8b74',
+                          backgroundColor: cat.color + '30',
                           ringColor: cat.color
                         }}
                       >
-                        <span className="material-symbols-outlined text-xl" style={{ color: cat.color }}>{cat.icon}</span>
-                        <span className="text-xs font-medium">{cat.name}</span>
+                        <span className="text-2xl">{getCategoryEmoji(cat.id)}</span>
+                        <span className="text-xs font-medium text-white">{cat.name}</span>
                       </button>
                     ))}
                   </div>
@@ -231,14 +242,14 @@ export default function DashboardPage() {
 
                 {/* Quick Amounts */}
                 <div className="mb-4">
-                  <label className="text-xs font-semibold text-text-primary block mb-2">快捷金额</label>
+                  <label className="text-xs font-semibold text-white/70 block mb-2">⚡ 快捷金额</label>
                   <div className="flex gap-2">
                     {[10, 50, 100, 200, 500].map((val) => (
                       <button
                         key={val}
                         type="button"
                         onClick={() => setAmount(val.toString())}
-                        className="flex-1 py-2 rounded-lg bg-surface-card-subtle text-text-secondary text-sm font-medium hover:bg-border-subtle transition-all"
+                        className="flex-1 py-2.5 rounded-xl bg-white/10 text-white/80 text-sm font-semibold hover:bg-white/20 hover:text-white transition-all"
                       >
                         ¥{val}
                       </button>
@@ -249,23 +260,23 @@ export default function DashboardPage() {
                 {/* Note & Merchant */}
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
-                    <label className="text-xs font-semibold text-text-primary block mb-2">备注</label>
+                    <label className="text-xs font-semibold text-white/70 block mb-2">📝 备注</label>
                     <input
                       type="text"
                       placeholder="选填"
                       value={note}
                       onChange={(e) => setNote(e.target.value)}
-                      className="w-full h-10 px-3 bg-surface-card-subtle rounded-lg focus:outline-none focus:ring-2 focus:ring-border-focus text-sm"
+                      className="w-full h-11 px-3 bg-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm text-white placeholder-white/30"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-text-primary block mb-2">商户</label>
+                    <label className="text-xs font-semibold text-white/70 block mb-2">🏪 商户</label>
                     <input
                       type="text"
                       placeholder="选填"
                       value={merchant}
                       onChange={(e) => setMerchant(e.target.value)}
-                      className="w-full h-10 px-3 bg-surface-card-subtle rounded-lg focus:outline-none focus:ring-2 focus:ring-border-focus text-sm"
+                      className="w-full h-11 px-3 bg-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm text-white placeholder-white/30"
                     />
                   </div>
                 </div>
@@ -273,45 +284,48 @@ export default function DashboardPage() {
                 <button
                   type="submit"
                   disabled={!amount || !category || loading}
-                  className="w-full h-12 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all disabled:opacity-50"
-                  style={{ background: type === 'expense' ? '#a05a63' : '#2d8b74' }}
+                  className="w-full h-14 rounded-2xl font-bold text-white flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                  style={{ background: type === 'expense' ? 'linear-gradient(135deg, #ff9a9e, #ff6b9d)' : 'linear-gradient(135deg, #98ddca, #2d8b74)' }}
                 >
                   {loading ? (
                     <span className="material-symbols-outlined animate-spin">progress_activity</span>
                   ) : (
-                    <span className="material-symbols-outlined">add</span>
+                    <span>{type === 'expense' ? '💸' : '💰'}</span>
                   )}
-                  <span>保存</span>
+                  <span>{loading ? '保存中...' : '保存'}</span>
                 </button>
               </form>
             </div>
 
             {/* Today's Records */}
-            <div className="bg-white rounded-2xl shadow-sm p-6">
+            <div className="glass-effect rounded-3xl p-6" style={{ background: 'rgba(255,255,255,0.08)' }}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-text-primary">今日记账</h3>
-                <a href="/transactions" className="text-xs text-primary hover:underline">查看全部</a>
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span>📋</span> 今日记账
+                </h3>
+                <a href="/transactions" className="text-xs text-pink-400 hover:text-pink-300 transition-colors">查看全部 →</a>
               </div>
 
               <div className="space-y-3">
                 {todayRecords.length === 0 ? (
-                  <div className="text-center py-8 text-text-muted">
-                    <span className="material-symbols-outlined text-4xl">receipt_long</span>
-                    <p className="mt-2 text-sm">今日暂无记账记录</p>
+                  <div className="text-center py-12 text-white/40">
+                    <span className="text-5xl">📭</span>
+                    <p className="mt-3 text-sm">今日暂无记账记录</p>
+                    <p className="text-xs mt-1">快来记一笔吧~</p>
                   </div>
                 ) : (
                   todayRecords.slice(0, 5).map((record) => {
                     const cat = currentCategories.find(c => c.id === record.category_id) || {};
                     return (
-                      <div key={record.id} className="flex items-center gap-3 p-3 rounded-xl bg-surface-card-subtle">
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: (cat.color || '#d0d8e4') + '20' }}>
-                          <span className="material-symbols-outlined" style={{ color: cat.color }}>{cat.icon || 'receipt'}</span>
+                      <div key={record.id} className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-all">
+                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl" style={{ backgroundColor: (cat.color || '#d0d8e4') + '30' }}>
+                          {getCategoryEmoji(cat.id)}
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-text-primary">{cat.name || '未知分类'}</p>
-                          <p className="text-xs text-text-muted">{record.note || '-'}</p>
+                          <p className="text-sm font-medium text-white">{cat.name || '未知分类'}</p>
+                          <p className="text-xs text-white/50">{record.note || '-'}</p>
                         </div>
-                        <p className={`text-sm font-bold ${record.type === 'expense' ? 'text-error' : 'text-secondary'}`}>
+                        <p className={`text-sm font-bold ${record.type === 'expense' ? 'text-pink-400' : 'text-emerald-400'}`}>
                           {record.type === 'expense' ? '-' : '+'}¥{parseFloat(record.amount).toFixed(2)}
                         </p>
                       </div>
@@ -325,4 +339,24 @@ export default function DashboardPage() {
       </main>
     </div>
   );
+}
+
+// Helper function to get emoji for category
+function getCategoryEmoji(categoryId) {
+  const emojiMap = {
+    'cat_dining': '🍜',
+    'cat_transit': '🚗',
+    'cat_shopping': '🛍️',
+    'cat_entertainment': '🎮',
+    'cat_health': '💊',
+    'cat_education': '📚',
+    'cat_housing': '🏠',
+    'cat_other': '📦',
+    'cat_salary': '💵',
+    'cat_bonus': '🎁',
+    'cat_investment': '📈',
+    'cat_gift': '💝',
+    'cat_other_income': '💰',
+  };
+  return emojiMap[categoryId] || '📝';
 }

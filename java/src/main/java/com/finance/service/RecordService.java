@@ -38,7 +38,9 @@ public class RecordService {
     public Page<Record> getRecords(String userId, int page, int pageSize, String type, LocalDate startDate, LocalDate endDate) {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
 
-        if (startDate != null && endDate != null) {
+        if (startDate != null && endDate != null && type != null && !type.isEmpty()) {
+            return recordRepository.findByUserIdAndTypeAndDateRange(userId, type, startDate, endDate, pageable);
+        } else if (startDate != null && endDate != null) {
             return recordRepository.findByUserIdAndDateRange(userId, startDate, endDate, pageable);
         } else if (type != null && !type.isEmpty()) {
             return recordRepository.findByUserIdAndTypeOrderByRecordDateDescCreatedAtDesc(userId, type, pageable);
@@ -54,8 +56,12 @@ public class RecordService {
     public Page<Record> getRecords(String userId, int page, int pageSize, String type, String categoryId, LocalDate startDate, LocalDate endDate) {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
 
-        // 简化实现，实际可以用更复杂的查询
-        if (startDate != null && endDate != null) {
+        // 组合过滤：日期范围 + 类型 + 分类
+        if (startDate != null && endDate != null && type != null && !type.isEmpty() && categoryId != null && !categoryId.isEmpty()) {
+            return recordRepository.findByUserIdAndTypeAndCategoryAndDateRange(userId, type, categoryId, startDate, endDate, pageable);
+        } else if (startDate != null && endDate != null && type != null && !type.isEmpty()) {
+            return recordRepository.findByUserIdAndTypeAndDateRange(userId, type, startDate, endDate, pageable);
+        } else if (startDate != null && endDate != null) {
             return recordRepository.findByUserIdAndDateRange(userId, startDate, endDate, pageable);
         } else if (type != null && !type.isEmpty()) {
             return recordRepository.findByUserIdAndTypeOrderByRecordDateDescCreatedAtDesc(userId, type, pageable);

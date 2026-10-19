@@ -1,0 +1,38 @@
+{
+  "name": "finance-butler-tests",
+  "version": "1.0.0",
+  "description": "财务小管家 测试工程",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "test:unit": "jest --testPathPattern=unit",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:e2e": "playwright test",
+    "test:performance": "k6 run performance/k6/*.js",
+    "test:security": "jest --testPathPattern=security",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e && npm run test:security",
+    "report": "playwright show-report",
+    "coverage": "jest --coverage",
+    "coverage:report": "jest --coverage && npx coveragehtml",
+    "test:watch": "jest --watch",
+    "test:clear": "jest --clearCache",
+    "e2e:install": "playwright install chromium",
+    "e2e:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@testing-library/jest-dom": "^6.1.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.5.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "k6": "^0.0.0",
+    "supertest": "^6.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "jest": {
+    "preset": "jest-environment-jsdom"
+  }
+}

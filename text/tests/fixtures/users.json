@@ -1,0 +1,26 @@
+[
+  {
+    "id": "test_user_001",
+    "username": "testuser1",
+    "password": "TestPassword123!",
+    "nickname": "测试用户1",
+    "email": "test1@example.com",
+    "status": "active"
+  },
+  {
+    "id": "test_user_002",
+    "username": "testuser2",
+    "password": "TestPassword123!",
+    "nickname": "测试用户2",
+    "email": "test2@example.com",
+    "status": "active"
+  },
+  {
+    "id": "test_user_003",
+    "username": "testuser3",
+    "password": "TestPassword123!",
+    "nickname": "测试用户3",
+    "email": "test3@example.com",
+    "status": "disabled"
+  }
+]

@@ -16,7 +16,10 @@ api.interceptors.request.use((config) => {
 
 // 响应拦截器
 api.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    // 返回完整响应数据，包含 success 状态
+    return response.data;
+  },
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token');

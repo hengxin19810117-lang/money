@@ -1,0 +1,29 @@
+{
+  "admin": {
+    "username": "admin",
+    "password": "admin123"
+  },
+  "testUsers": [
+    {
+      "username": "perf_test_1",
+      "password": "TestPassword123!"
+    },
+    {
+      "username": "perf_test_2",
+      "password": "TestPassword123!"
+    },
+    {
+      "username": "perf_test_3",
+      "password": "TestPassword123!"
+    }
+  ],
+  "apiBaseUrl": "http://localhost:3000",
+  "adminApiBaseUrl": "http://localhost:3002",
+  "testDatabase": {
+    "host": "localhost",
+    "port": 3306,
+    "name": "money_test",
+    "user": "root",
+    "password": "123456"
+  }
+}
